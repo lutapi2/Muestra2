@@ -14,7 +14,7 @@ use App\Helpers\AuthHelper;
     </div>
 
     <button onclick="openModal('modalNuevoTicket')" class="btn btn-primary">
-        ➕ Crear Solicitud de Ayuda
+        <?= \App\Helpers\IconHelper::render('plus', 16) ?> Crear Solicitud de Ayuda
     </button>
 </div>
 
@@ -54,8 +54,8 @@ use App\Helpers\AuthHelper;
                             </span>
                         </td>
                         <td style="text-align: center;">
-                            <button onclick="verTicket(<?= htmlspecialchars(json_encode($t), ENT_QUOTES, 'UTF-8') ?>)" class="btn btn-secondary btn-sm">
-                                👁️ Ver Detalle
+                            <button onclick="verTicket(<?= htmlspecialchars(json_encode($t), ENT_QUOTES, 'UTF-8') ?>)" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+                                <?= \App\Helpers\IconHelper::render('eye', 14) ?> Ver Detalle
                             </button>
                         </td>
                     </tr>

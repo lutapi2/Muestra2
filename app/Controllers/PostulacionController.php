@@ -136,6 +136,11 @@ class PostulacionController {
             Response::redirect('c=Dashboard&a=index');
         }
 
+        if (!$postulacion) {
+            AuthHelper::setFlash('danger', 'Postulación no encontrada.');
+            Response::redirect('c=Dashboard&a=index');
+        }
+
         $items = ItemHV::getByPostulacion($postulacionId);
 
         View::render('postulacion.constancia', [
@@ -149,6 +154,11 @@ class PostulacionController {
 
         $postulacionId = (int)$request->get('id');
         $postulacion = Postulacion::findById($postulacionId);
+
+        if (!$postulacion) {
+            AuthHelper::setFlash('danger', 'Postulación no encontrada.');
+            Response::redirect('c=Dashboard&a=index');
+        }
 
         $pdo = \App\Core\Database::getConnection();
         $stmt = $pdo->prepare("
@@ -207,7 +217,9 @@ class PostulacionController {
         $pdo->prepare("UPDATE detalles_subsanacion SET subsanado = 1 WHERE item_hv_id = :id")->execute([':id' => $itemId]);
 
         // If no more items to subsanar, update postulacion back to 'en_revision'
-        $pendientes = (int)$pdo->query("SELECT COUNT(*) FROM detalles_subsanacion d JOIN items_hv i ON d.item_hv_id = i.id WHERE i.postulacion_id = $postulacionId AND d.subsanado = 0")->fetchColumn();
+        $stmtPendientes = $pdo->prepare("SELECT COUNT(*) FROM detalles_subsanacion d JOIN items_hv i ON d.item_hv_id = i.id WHERE i.postulacion_id = :pid AND d.subsanado = 0");
+        $stmtPendientes->execute([':pid' => $postulacionId]);
+        $pendientes = (int)$stmtPendientes->fetchColumn();
         if ($pendientes === 0) {
             $pdo->prepare("UPDATE postulaciones SET estado = 'en_revision' WHERE id = :id")->execute([':id' => $postulacionId]);
             $pdo->prepare("UPDATE solicitudes_subsanacion SET estado = 'respondida' WHERE postulacion_id = :id AND estado = 'pendiente'")->execute([':id' => $postulacionId]);

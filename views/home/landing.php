@@ -1,8 +1,5 @@
 <?php
-/**
- * views/home/landing.php
- * Página de Inicio Institucional CECAR (Exacto a Imagen 1 - Superior)
- */
+use App\Helpers\IconHelper;
 ?>
 <div class="landing-hero">
     <!-- Left Column: Copy & Actions -->
@@ -23,10 +20,12 @@
 
         <div class="landing-actions">
             <a href="<?= BASE_URL ?>/index.php?c=Auth&a=login" class="landing-btn-primary">
-                <span>🔑</span> Iniciar sesión
+                <?= IconHelper::render('lock', 16) ?>
+                <span>Iniciar sesión</span>
             </a>
             <a href="<?= BASE_URL ?>/index.php?c=Home&a=comoFunciona" class="landing-btn-outline">
-                <span>▶</span> Ver cómo funciona
+                <?= IconHelper::render('play', 16) ?>
+                <span>Ver cómo funciona</span>
             </a>
         </div>
     </div>
@@ -44,10 +43,12 @@
                 <!-- Status 1: Aprobado -->
                 <div class="preview-status-item">
                     <div class="item-info">
-                        <span style="background: #064e3b; color: #34d399; padding: 0.35rem 0.5rem; border-radius: 6px; font-size: 0.85rem;">📄</span>
+                        <span style="background: #064e3b; color: #34d399; padding: 0.35rem 0.5rem; border-radius: 6px; display: inline-flex;">
+                            <?= IconHelper::render('check', 14) ?>
+                        </span>
                         <div style="height: 8px; width: 140px; background: #133a30; border-radius: 4px;"></div>
                     </div>
-                    <span style="background: #065f46; color: #34d399; padding: 0.2rem 0.65rem; border-radius: 9999px; font-size: 0.78rem; font-weight: 700;">
+                    <span style="background: #065f46; color: #34d399; padding: 0.2rem 0.65rem; border-radius: 4px; font-size: 0.78rem; font-weight: 700;">
                         Aprobado
                     </span>
                 </div>
@@ -55,10 +56,12 @@
                 <!-- Status 2: En proceso -->
                 <div class="preview-status-item">
                     <div class="item-info">
-                        <span style="background: #451a03; color: #f59e0b; padding: 0.35rem 0.5rem; border-radius: 6px; font-size: 0.85rem;">⏳</span>
+                        <span style="background: #451a03; color: #f59e0b; padding: 0.35rem 0.5rem; border-radius: 6px; display: inline-flex;">
+                            <?= IconHelper::render('clock', 14) ?>
+                        </span>
                         <div style="height: 8px; width: 180px; background: #133a30; border-radius: 4px;"></div>
                     </div>
-                    <span style="background: #78350f; color: #fcd34d; padding: 0.2rem 0.65rem; border-radius: 9999px; font-size: 0.78rem; font-weight: 700;">
+                    <span style="background: #78350f; color: #fcd34d; padding: 0.2rem 0.65rem; border-radius: 4px; font-size: 0.78rem; font-weight: 700;">
                         En proceso
                     </span>
                 </div>
@@ -66,10 +69,12 @@
                 <!-- Status 3: Firmado -->
                 <div class="preview-status-item">
                     <div class="item-info">
-                        <span style="background: #064e3b; color: #34d399; padding: 0.35rem 0.5rem; border-radius: 6px; font-size: 0.85rem;">✒️</span>
+                        <span style="background: #064e3b; color: #34d399; padding: 0.35rem 0.5rem; border-radius: 6px; display: inline-flex;">
+                            <?= IconHelper::render('edit', 14) ?>
+                        </span>
                         <div style="height: 8px; width: 120px; background: #133a30; border-radius: 4px;"></div>
                     </div>
-                    <span style="background: #065f46; color: #34d399; padding: 0.2rem 0.65rem; border-radius: 9999px; font-size: 0.78rem; font-weight: 700;">
+                    <span style="background: #065f46; color: #34d399; padding: 0.2rem 0.65rem; border-radius: 4px; font-size: 0.78rem; font-weight: 700;">
                         Firmado
                     </span>
                 </div>

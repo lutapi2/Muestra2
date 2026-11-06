@@ -24,6 +24,9 @@ class AuthController {
         $password = $request->post('password', '');
 
         if (empty($correo) || empty($password)) {
+            if ($request->isAjax()) {
+                Response::json(['success' => false, 'message' => 'Por favor ingrese su correo y contraseña.'], 400);
+            }
             AuthHelper::setFlash('danger', 'Por favor ingrese su correo y contraseña.');
             Response::redirect('c=Auth&a=login');
         }
@@ -32,6 +35,9 @@ class AuthController {
 
         if (!$usuario || !password_verify($password, $usuario['password_hash'])) {
             AuditHelper::log('login_fallido', 'usuarios', 0, null, ['correo' => $correo]);
+            if ($request->isAjax()) {
+                Response::json(['success' => false, 'message' => 'Credenciales incorrectas o usuario inactivo.'], 401);
+            }
             AuthHelper::setFlash('danger', 'Credenciales incorrectas o usuario inactivo.');
             Response::redirect('c=Auth&a=login');
         }
@@ -41,6 +47,15 @@ class AuthController {
         AuditHelper::log('login_exitoso', 'usuarios', $usuario['id']);
 
         AuthHelper::setFlash('success', 'Bienvenido(a) a la plataforma de contratación CECAR, ' . $usuario['nombres'] . '.');
+
+        if ($request->isAjax()) {
+            Response::json([
+                'success' => true,
+                'message' => 'Bienvenido(a), ' . $usuario['nombres'],
+                'redirect' => BASE_URL . '/index.php?c=Dashboard&a=index'
+            ]);
+        }
+
         Response::redirect('c=Dashboard&a=index');
     }
 
@@ -123,6 +138,14 @@ class AuthController {
             AuthHelper::setFlash('info', 'Sesión iniciada como: ' . $usuario['nombres'] . ' (' . AuthHelper::getRolNombre() . ')');
         }
 
+        if ($request->isAjax()) {
+            Response::json([
+                'success' => true,
+                'message' => 'Accediendo como ' . ($usuario ? $usuario['nombres'] : $rol),
+                'redirect' => BASE_URL . '/index.php?c=Dashboard&a=index'
+            ]);
+        }
+
         Response::redirect('c=Dashboard&a=index');
     }
 
@@ -135,6 +158,20 @@ class AuthController {
     }
 
     public function recuperar(Request $request): void {
-        View::render('auth.recuperar', [], 'landing');
+        View::render('auth.recuperar', [
+            'csrf_token' => $request->getCsrfToken()
+        ], 'landing');
+    }
+
+    public function doRecuperar(Request $request): void {
+        $correo = trim($request->post('correo', ''));
+        if (empty($correo) || !filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+            AuthHelper::setFlash('danger', 'Por favor ingrese un correo electrónico válido.');
+            Response::redirect('c=Auth&a=recuperar');
+        }
+
+        AuditHelper::log('solicitud_recuperacion', 'usuarios', 0, null, ['correo' => $correo]);
+        AuthHelper::setFlash('success', 'Si el correo electrónico está registrado en CECAR, recibirá las instrucciones para restablecer su contraseña.');
+        Response::redirect('c=Auth&a=login');
     }
 }

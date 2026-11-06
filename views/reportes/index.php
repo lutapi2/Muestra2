@@ -13,21 +13,21 @@ use App\Helpers\FormatHelper;
     </div>
 
     <!-- Exportar Excel -->
-    <a href="<?= BASE_URL ?>/index.php?c=Reportes&a=exportarExcel&tipo=<?= htmlspecialchars($tipoReporte, ENT_QUOTES, 'UTF-8') ?>" class="btn btn-primary" style="background: #15803d;">
-        📊 Exportar Informe a Excel
+    <a href="<?= BASE_URL ?>/index.php?c=Reportes&a=exportarExcel&tipo=<?= htmlspecialchars($tipoReporte, ENT_QUOTES, 'UTF-8') ?>" class="btn btn-primary" style="background: #15803d; display: inline-flex; align-items: center; gap: 0.4rem;">
+        <?= \App\Helpers\IconHelper::render('download', 16) ?> Exportar Informe a Excel
     </a>
 </div>
 
 <!-- Tabs de Selección de los 3 Reportes Obligatorios (RF-096) -->
-<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem;">
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem; flex-wrap: wrap;">
     <a href="<?= BASE_URL ?>/index.php?c=Reportes&a=index&tipo=no_aprobados" class="btn <?= ($tipoReporte === 'no_aprobados') ? 'btn-primary' : 'btn-secondary' ?>">
-        ❌ 1. No Aprobados (Etapa y Causal)
+        1. No Aprobados (Etapa y Causal)
     </a>
     <a href="<?= BASE_URL ?>/index.php?c=Reportes&a=index&tipo=en_proceso" class="btn <?= ($tipoReporte === 'en_proceso') ? 'btn-primary' : 'btn-secondary' ?>">
-        ⏳ 2. En Proceso (Etapa Actual)
+        2. En Proceso (Etapa Actual)
     </a>
     <a href="<?= BASE_URL ?>/index.php?c=Reportes&a=index&tipo=seleccionados" class="btn <?= ($tipoReporte === 'seleccionados') ? 'btn-primary' : 'btn-secondary' ?>">
-        ⭐ 3. Seleccionados (Estado Formalización)
+        3. Seleccionados (Estado Formalización)
     </a>
 </div>
 

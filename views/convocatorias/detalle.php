@@ -106,7 +106,7 @@ use App\Helpers\AuthHelper;
             </div>
 
             <a href="<?= BASE_URL ?>/index.php?c=Postulacion&a=index&convocatoria_id=<?= $convocatoria['id'] ?>" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem; font-weight: 700;">
-                📝 Diligenciar Postulación
+                <?= \App\Helpers\IconHelper::render('document', 18) ?> Diligenciar Postulación
             </a>
         </div>
     </div>

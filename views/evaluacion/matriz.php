@@ -1,6 +1,7 @@
 <?php
 use App\Helpers\FormatHelper;
 use App\Helpers\AuthHelper;
+use App\Helpers\IconHelper;
 ?>
 
 <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
@@ -70,7 +71,7 @@ use App\Helpers\AuthHelper;
                         <td><?= FormatHelper::badgeEstado($p['estado']) ?></td>
 
                         <td>
-                            <span class="badge" style="background: <?= ($p['resultado_documental'] === 'conforme') ? '#10b981' : '#f59e0b' ?>; color: #fff;">
+                            <span class="badge" style="background: <?= ($p['resultado_documental'] === 'conforme') ? '#f0fdf4' : '#fffbeb' ?>; color: <?= ($p['resultado_documental'] === 'conforme') ? '#15803d' : '#b45309' ?>; border: 1px solid <?= ($p['resultado_documental'] === 'conforme') ? '#bbf7d0' : '#fde68a' ?>;">
                                 <?= ucfirst($p['resultado_documental']) ?>
                             </span>
                         </td>
@@ -80,7 +81,7 @@ use App\Helpers\AuthHelper;
                                 <strong style="color: #059669;"><?= number_format($p['nota_psicotecnica'], 1) ?> pts</strong>
                             <?php else: ?>
                                 <button onclick="abrirModalPrueba(<?= $p['id'] ?>, 'psicotecnica', '<?= htmlspecialchars($p['nombres'] . ' ' . $p['apellidos'], ENT_QUOTES, 'UTF-8') ?>')" class="btn btn-secondary btn-sm" style="font-size: 0.75rem;">
-                                    ➕ Registrar
+                                    <span>Registrar</span>
                                 </button>
                             <?php endif; ?>
                         </td>
@@ -90,7 +91,7 @@ use App\Helpers\AuthHelper;
                                 <strong style="color: #059669;"><?= number_format($p['nota_aula'], 1) ?> pts</strong>
                             <?php else: ?>
                                 <button onclick="abrirModalPrueba(<?= $p['id'] ?>, 'aula_docente', '<?= htmlspecialchars($p['nombres'] . ' ' . $p['apellidos'], ENT_QUOTES, 'UTF-8') ?>')" class="btn btn-secondary btn-sm" style="font-size: 0.75rem;">
-                                    ➕ Evaluar Aula
+                                    <span>Evaluar Aula</span>
                                 </button>
                             <?php endif; ?>
                         </td>
@@ -111,8 +112,8 @@ use App\Helpers\AuthHelper;
                                     <input type="hidden" name="convocatoria_id" value="<?= $convocatoriaId ?>">
                                     <input type="hidden" name="decision" value="preseleccionar">
                                     <input type="hidden" name="fundamento" value="Cumple con los requisitos para entrevista institucional.">
-                                    <button type="submit" class="btn btn-secondary btn-sm" title="Preseleccionar para entrevista" style="background: #ede9fe; color: #6d28d9; border-color: #ddd6fe;">
-                                        ⭐ Preseleccionar
+                                    <button type="submit" class="btn btn-secondary btn-sm" title="Preseleccionar para entrevista" style="background: #f5f3ff; color: #6d28d9; border-color: #ddd6fe;">
+                                        Preseleccionar
                                     </button>
                                 </form>
 
@@ -123,13 +124,13 @@ use App\Helpers\AuthHelper;
                                     <input type="hidden" name="decision" value="seleccionar">
                                     <input type="hidden" name="fundamento" value="Aprobación unánime en todas las fases del proceso de selección.">
                                     <button type="submit" class="btn btn-success btn-sm" title="Seleccionar para vinculación" style="font-weight: 700;">
-                                        ✔️ Seleccionar
+                                        <?= IconHelper::render('check', 13) ?> Seleccionar
                                     </button>
                                 </form>
 
                                 <!-- Descartar con causal (RF-058, RF-093, RN-024) -->
                                 <button onclick="abrirModalDescarte(<?= $p['id'] ?>, '<?= htmlspecialchars($p['nombres'] . ' ' . $p['apellidos'], ENT_QUOTES, 'UTF-8') ?>')" class="btn btn-danger btn-sm" title="Descartar con causal">
-                                    ❌ Descartar
+                                    <?= IconHelper::render('x', 13) ?> Descartar
                                 </button>
                             </div>
                         </td>

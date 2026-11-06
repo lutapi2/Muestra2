@@ -76,6 +76,11 @@ class KanbanController {
         $stmtPost->execute([':id' => $postulacionId]);
         $postulacion = $stmtPost->fetch();
 
+        if (!$postulacion) {
+            AuthHelper::setFlash('danger', 'Postulación no encontrada.');
+            \App\Core\Response::redirect('c=Kanban&a=index');
+        }
+
         $stmtMov = $pdo->prepare("
             SELECT m.*, u.nombres, u.apellidos, u.cargo_interno
             FROM movimientos_historial m

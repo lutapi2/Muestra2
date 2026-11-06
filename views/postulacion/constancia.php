@@ -43,8 +43,8 @@ use App\Helpers\FormatHelper;
         </h4>
         <ul style="list-style: none; font-size: 0.85rem; color: #475569; display: flex; flex-direction: column; gap: 0.4rem;">
             <?php foreach ($items as $item): ?>
-                <li style="display: flex; justify-content: space-between; padding: 0.35rem 0.5rem; background: #fdfdfd; border-radius: 4px;">
-                    <span>✔️ <?= htmlspecialchars($item['titulo'], ENT_QUOTES, 'UTF-8') ?></span>
+                <li style="display: flex; justify-content: space-between; padding: 0.35rem 0.5rem; background: #fdfdfd; border-radius: 4px; align-items: center;">
+                    <span style="display: inline-flex; align-items: center; gap: 0.4rem; color: #10b981;"><?= \App\Helpers\IconHelper::render('check', 14) ?> <span style="color: #334155;"><?= htmlspecialchars($item['titulo'], ENT_QUOTES, 'UTF-8') ?></span></span>
                     <span style="color: #64748b; font-size: 0.78rem;"><?= htmlspecialchars($item['nombre_original'] ?? 'Sin archivo adjunto', ENT_QUOTES, 'UTF-8') ?></span>
                 </li>
             <?php endforeach; ?>
@@ -56,8 +56,8 @@ use App\Helpers\FormatHelper;
     </div>
 
     <div style="display: flex; justify-content: center; gap: 1rem;">
-        <button onclick="window.print()" class="btn btn-primary" style="padding: 0.6rem 1.5rem; font-weight: 700;">
-            🖨️ Imprimir Constancia / Guardar PDF
+        <button onclick="window.print()" class="btn btn-primary" style="padding: 0.6rem 1.5rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.4rem;">
+            <?= \App\Helpers\IconHelper::render('document', 16) ?> Imprimir Constancia / Guardar PDF
         </button>
         <a href="<?= BASE_URL ?>/index.php?c=Dashboard&a=index" class="btn btn-secondary" style="padding: 0.6rem 1.5rem;">
             Volver al Dashboard

@@ -1,6 +1,7 @@
 <?php
 use App\Helpers\FormatHelper;
 use App\Helpers\AuthHelper;
+use App\Helpers\IconHelper;
 ?>
 
 <div style="margin-bottom: 1.5rem;">
@@ -18,7 +19,7 @@ use App\Helpers\AuthHelper;
         <div style="display: flex; align-items: center; gap: 0.75rem;">
             <?= FormatHelper::badgeEstado($postulacion['estado']) ?>
             <?php if (!$esEditable): ?>
-                <span class="badge" style="background: #1e293b; color: #fff;">🔒 Bloqueada tras envío (RN-009)</span>
+                <span class="badge" style="background: #1e293b; color: #fff; border-radius: 4px;">Bloqueada tras envío (RN-009)</span>
             <?php endif; ?>
         </div>
     </div>
@@ -29,8 +30,8 @@ use App\Helpers\AuthHelper;
             <strong style="color: #1e293b;">Nivel de Completitud del Expediente</strong>
             <span style="font-weight: 700; color: #10b981;"><?= (int)$postulacion['porcentaje_avance'] ?>% Completado</span>
         </div>
-        <div style="height: 10px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
-            <div style="width: <?= (int)$postulacion['porcentaje_avance'] ?>%; height: 100%; background: linear-gradient(90deg, #10b981, #059669); transition: width 0.3s ease;"></div>
+        <div style="height: 8px; background: #e2e8f0; border-radius: 9999px; overflow: hidden;">
+            <div style="width: <?= (int)$postulacion['porcentaje_avance'] ?>%; height: 100%; background: #10b981; transition: width 0.3s ease;"></div>
         </div>
     </div>
 </div>
@@ -39,11 +40,13 @@ use App\Helpers\AuthHelper;
     <!-- Left Column: Form & Registered Items by Category -->
     <div style="display: flex; flex-direction: column; gap: 1.5rem;">
         <?php if ($esEditable): ?>
-            <!-- Form to Add an Item and Attach Support (RF-019 a RF-032) -->
+            <!-- Formulario de Registro de Ítem con Soporte (RF-019 a RF-032) -->
             <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 10px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
                 <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.25rem;">
-                    <span style="font-size: 1.2rem; color: #10b981;">➕</span>
-                    <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b;">Registrar Ítem de Hoja de Vida y Soporte</h3>
+                    <span style="color: #10b981; display: inline-flex;">
+                        <?= IconHelper::render('plus', 18) ?>
+                    </span>
+                    <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b;">Registrar Ítem de Hoja de Vida y Soporte</h3>
                 </div>
 
                 <form action="<?= BASE_URL ?>/index.php?c=Postulacion&a=agregarItem" method="POST" enctype="multipart/form-data">
@@ -74,10 +77,10 @@ use App\Helpers\AuthHelper;
                         <input type="text" name="titulo" required class="filter-control" style="width: 100%;" placeholder="Ej: Licenciatura en Pedagogía - Universidad de Sucre (2018)">
                     </div>
 
-                    <!-- Independent file upload for this item (RF-032, RF-034) -->
+                    <!-- Carga de soporte probatorio independiente (RF-032, RF-034) -->
                     <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem;">
                         <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #1e293b; margin-bottom: 0.35rem;">
-                            📎 Adjuntar Soporte Probatorio (PDF, JPG o PNG - Máx. 10MB)
+                            Adjuntar Soporte Probatorio (PDF, JPG o PNG - Máx. 10MB)
                         </label>
                         <input type="file" name="archivo" accept=".pdf,.jpg,.jpeg,.png" class="filter-control" style="width: 100%; background: #ffffff;">
                         <small style="color: #64748b; font-size: 0.75rem; display: block; margin-top: 0.25rem;">
@@ -87,22 +90,23 @@ use App\Helpers\AuthHelper;
 
                     <div style="display: flex; justify-content: flex-end;">
                         <button type="submit" class="btn btn-primary" style="font-weight: 700;">
-                            💾 Guardar Ítem y Soporte
+                            <span>Guardar Ítem y Soporte</span>
                         </button>
                     </div>
                 </form>
             </div>
         <?php endif; ?>
 
-        <!-- List of Registered Items by Category -->
+        <!-- Lista de Ítems Registrados por Categoría -->
         <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 10px; padding: 1.5rem;">
-            <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Ítems y Soportes Registrados en este Expediente</h3>
+            <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Ítems y Soportes Registrados en este Expediente</h3>
 
             <?php foreach ($itemsPorCategoria as $catKey => $catData): ?>
                 <?php if (!empty($catData['items'])): ?>
                     <div style="margin-bottom: 1.5rem;">
-                        <h4 style="font-size: 0.92rem; font-weight: 700; color: #0b6b44; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.35rem; margin-bottom: 0.75rem;">
-                            📁 <?= htmlspecialchars($catData['titulo'], ENT_QUOTES, 'UTF-8') ?>
+                        <h4 style="font-size: 0.9rem; font-weight: 700; color: #0b6b44; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.35rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.4rem;">
+                            <?= IconHelper::render('folder', 15) ?>
+                            <span><?= htmlspecialchars($catData['titulo'], ENT_QUOTES, 'UTF-8') ?></span>
                         </h4>
                         <div style="display: flex; flex-direction: column; gap: 0.65rem;">
                             <?php foreach ($catData['items'] as $item): ?>
@@ -121,7 +125,8 @@ use App\Helpers\AuthHelper;
                                         <?= FormatHelper::badgeEstado($item['estado']) ?>
                                         <?php if (!empty($item['soporte_id'])): ?>
                                             <a href="<?= BASE_URL ?>/index.php?c=Descarga&a=ver&id=<?= $item['soporte_id'] ?>" target="_blank" class="btn btn-secondary btn-sm" title="Ver archivo">
-                                                📄 <?= htmlspecialchars(substr($item['nombre_original'], 0, 15), ENT_QUOTES, 'UTF-8') ?>...
+                                                <?= IconHelper::render('file-text', 13) ?>
+                                                <span><?= htmlspecialchars(substr($item['nombre_original'], 0, 18), ENT_QUOTES, 'UTF-8') ?>...</span>
                                             </a>
                                         <?php endif; ?>
                                     </div>
@@ -138,7 +143,7 @@ use App\Helpers\AuthHelper;
     <div style="display: flex; flex-direction: column; gap: 1.5rem;">
         <?php if ($esEditable): ?>
             <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 10px; padding: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.03);">
-                <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">Envío Definitivo de Postulación</h3>
+                <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">Envío Definitivo de Postulación</h3>
                 <p style="color: #64748b; font-size: 0.82rem; margin-bottom: 1.25rem;">
                     Una vez enviada, su postulación quedará bloqueada para revisión por parte de Gestión de Talento Humano (RN-009).
                 </p>
@@ -167,7 +172,7 @@ use App\Helpers\AuthHelper;
                     </div>
 
                     <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem; font-weight: 700;">
-                        🚀 Radicar Postulación Definitiva
+                        <span>Radicar Postulación Definitiva</span>
                     </button>
                 </form>
             </div>
@@ -178,7 +183,8 @@ use App\Helpers\AuthHelper;
                     Su postulación fue confirmada el <?= FormatHelper::fecha($postulacion['fecha_envio']) ?>.
                 </p>
                 <a href="<?= BASE_URL ?>/index.php?c=Postulacion&a=constancia&id=<?= $postulacion['id'] ?>" class="btn btn-secondary" style="width: 100%; justify-content: center;">
-                    📄 Ver Constancia de Radicación
+                    <?= IconHelper::render('file-text', 14) ?>
+                    <span>Ver Constancia de Radicación</span>
                 </a>
             </div>
         <?php endif; ?>

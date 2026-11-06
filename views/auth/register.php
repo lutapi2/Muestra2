@@ -4,7 +4,7 @@
         <p style="color: #94a3b8; font-size: 0.85rem;">Cree su cuenta para postular a convocatorias públicas de CECAR</p>
     </div>
 
-    <form action="<?= BASE_URL ?>/index.php?c=Auth&a=doRegister" method="POST">
+    <form action="<?= BASE_URL ?>/index.php?c=Auth&a=doRegister" method="POST" id="registerForm">
         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token ?? '', ENT_QUOTES, 'UTF-8') ?>">
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">

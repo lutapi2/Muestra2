@@ -1,18 +1,16 @@
 <?php
 /**
  * views/dashboard/index.php
- * Dashboard Institucional CECAR (Exacto a Imagen 1 - Inferior)
- * Cumple con RF-085, RF-086 y componentes visuales institucionales
+ * Dashboard Institucional CECAR (Imagen 1 Inferior - Estilo Limpio y Sin Emojis)
  */
 use App\Helpers\AuthHelper;
 use App\Helpers\FormatHelper;
+use App\Helpers\IconHelper;
 
 $usuario = AuthHelper::getUsuarioActual();
 ?>
 
-<!-- ========================================================================
-     Banner Verde Institucional de Bienvenida (Exacto a Imagen 1 Inferior)
-     ======================================================================== -->
+<!-- Banner Verde Institucional de Bienvenida (Exacto a Imagen 1 Inferior) -->
 <div class="banner-gestion">
     <div class="banner-gestion-content">
         <h2>¡Bienvenido al Sistema de Gestión!</h2>
@@ -29,20 +27,18 @@ $usuario = AuthHelper::getUsuarioActual();
         <div class="banner-tag">
             <span>SEDE</span> Sincelejo
         </div>
-        <div class="user-avatar" style="width: 44px; height: 44px; background: #0b4f2c; border: 2px solid #6ee7b7; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+        <div class="user-avatar" style="width: 42px; height: 42px; background: #0b4f2c; border: 2px solid #6ee7b7; font-size: 1rem;">
             <?= strtoupper(substr(AuthHelper::getNombreCompleto(), 0, 1)) ?>
         </div>
     </div>
 </div>
 
-<!-- ========================================================================
-     4 Cajas de Módulos de Gestión (Exacto a Imagen 1 Inferior)
-     ======================================================================== -->
+<!-- 4 Cajas de Módulos de Gestión (Imagen 1 Inferior - Iconos Limpios) -->
 <div class="module-cards-grid">
-    <!-- 1. Usuarios: Gestión completa -->
+    <!-- 1. Usuarios -->
     <a href="<?= BASE_URL ?>/index.php?c=Admin&a=usuarios" class="module-card">
-        <div class="module-card-icon" style="background: #e0f2fe; color: #0284c7;">
-            👥
+        <div class="module-card-icon" style="background: #f0fdf4; color: #15803d;">
+            <?= IconHelper::render('users', 22) ?>
         </div>
         <div class="module-card-text">
             <h3>Usuarios</h3>
@@ -50,10 +46,10 @@ $usuario = AuthHelper::getUsuarioActual();
         </div>
     </a>
 
-    <!-- 2. Activos: Control total -->
+    <!-- 2. Activos -->
     <a href="<?= BASE_URL ?>/index.php?c=Contratacion&a=index" class="module-card">
-        <div class="module-card-icon" style="background: #dcfce7; color: #166534;">
-            📦
+        <div class="module-card-icon" style="background: #f0fdf4; color: #15803d;">
+            <?= IconHelper::render('box', 22) ?>
         </div>
         <div class="module-card-text">
             <h3>Activos</h3>
@@ -61,10 +57,10 @@ $usuario = AuthHelper::getUsuarioActual();
         </div>
     </a>
 
-    <!-- 3. Tareas: Pendientes -->
+    <!-- 3. Tareas -->
     <a href="<?= BASE_URL ?>/index.php?c=PlanTrabajo&a=index" class="module-card">
-        <div class="module-card-icon" style="background: #fef3c7; color: #d97706;">
-            📝
+        <div class="module-card-icon" style="background: #f0fdf4; color: #15803d;">
+            <?= IconHelper::render('calendar', 22) ?>
         </div>
         <div class="module-card-text">
             <h3>Tareas</h3>
@@ -72,10 +68,10 @@ $usuario = AuthHelper::getUsuarioActual();
         </div>
     </a>
 
-    <!-- 4. Reportes: Análisis -->
+    <!-- 4. Reportes -->
     <a href="<?= BASE_URL ?>/index.php?c=Reportes&a=index" class="module-card">
-        <div class="module-card-icon" style="background: #f1f5f9; color: #475569;">
-            📈
+        <div class="module-card-icon" style="background: #f0fdf4; color: #15803d;">
+            <?= IconHelper::render('chart', 22) ?>
         </div>
         <div class="module-card-text">
             <h3>Reportes</h3>
@@ -84,29 +80,28 @@ $usuario = AuthHelper::getUsuarioActual();
     </a>
 </div>
 
-<!-- ========================================================================
-     Acciones Rápidas (Exacto a Imagen 1 Inferior)
-     ======================================================================== -->
+<!-- Acciones Rápidas (Imagen 1 Inferior) -->
 <div class="quick-actions-bar">
     <h4>Acciones Rápidas</h4>
     <div class="quick-actions-buttons">
         <a href="<?= BASE_URL ?>/index.php?c=Convocatoria&a=crear" class="btn btn-secondary">
-            <span>➕</span> Nuevo Título
+            <?= IconHelper::render('plus', 14) ?>
+            <span>Nuevo Título</span>
         </a>
         <a href="<?= BASE_URL ?>/index.php?c=Contratacion&a=index" class="btn btn-secondary">
-            <span>📋</span> Registrar Activo
+            <?= IconHelper::render('file-text', 14) ?>
+            <span>Registrar Activo</span>
         </a>
         <a href="<?= BASE_URL ?>/index.php?c=Reportes&a=index" class="btn btn-secondary">
-            <span>📊</span> Generar Reporte
+            <?= IconHelper::render('chart', 14) ?>
+            <span>Generar Reporte</span>
         </a>
     </div>
 </div>
 
-<!-- ========================================================================
-     Tarjetas de Indicadores Integrales por Estado (RF-086)
-     ======================================================================== -->
+<!-- Indicadores Integrales por Estado (RF-086) -->
 <div style="margin-bottom: 2rem;">
-    <h3 style="font-size: 1.1rem; font-weight: 800; color: #1e293b; margin-bottom: 1rem;">
+    <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">
         Indicadores Clave del Proceso de Selección y Contratación
     </h3>
     <div class="kpi-counters-row" style="grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));">
@@ -115,55 +110,63 @@ $usuario = AuthHelper::getUsuarioActual();
                 <div class="kpi-counter-number"><?= $stats['total_postulados'] ?></div>
                 <div class="kpi-counter-label">Postulados Totales</div>
             </div>
-            <div class="kpi-counter-icon" style="margin-left: auto;">👥</div>
-        </div>
-
-        <div class="kpi-counter-card" style="border-color: #fde68a;">
-            <div>
-                <div class="kpi-counter-number" style="color: #d97706;"><?= $stats['en_proceso'] ?></div>
-                <div class="kpi-counter-label">En Proceso / Revisión</div>
+            <div class="kpi-counter-icon" style="margin-left: auto; color: #64748b;">
+                <?= IconHelper::render('users', 20) ?>
             </div>
-            <div class="kpi-counter-icon" style="margin-left: auto;">⏳</div>
-        </div>
-
-        <div class="kpi-counter-card" style="border-color: #fecaca;">
-            <div>
-                <div class="kpi-counter-number" style="color: #dc2626;"><?= $stats['no_aprobados'] ?></div>
-                <div class="kpi-counter-label">No Aprobados</div>
-            </div>
-            <div class="kpi-counter-icon" style="margin-left: auto;">❌</div>
         </div>
 
         <div class="kpi-counter-card">
             <div>
-                <div class="kpi-counter-number" style="color: #059669;"><?= $stats['seleccionados'] ?></div>
-                <div class="kpi-counter-label">Seleccionados</div>
+                <div class="kpi-counter-number" style="color: #b45309;"><?= $stats['en_proceso'] ?></div>
+                <div class="kpi-counter-label">En Proceso / Revisión</div>
             </div>
-            <div class="kpi-counter-icon" style="margin-left: auto;">⭐</div>
+            <div class="kpi-counter-icon" style="margin-left: auto; color: #b45309;">
+                <?= IconHelper::render('clock', 20) ?>
+            </div>
         </div>
 
-        <div class="kpi-counter-card" style="border-color: #a7f3d0; background: #f0fdf4;">
+        <div class="kpi-counter-card">
+            <div>
+                <div class="kpi-counter-number" style="color: #b91c1c;"><?= $stats['no_aprobados'] ?></div>
+                <div class="kpi-counter-label">No Aprobados</div>
+            </div>
+            <div class="kpi-counter-icon" style="margin-left: auto; color: #b91c1c;">
+                <?= IconHelper::render('x-circle', 20) ?>
+            </div>
+        </div>
+
+        <div class="kpi-counter-card">
+            <div>
+                <div class="kpi-counter-number" style="color: #15803d;"><?= $stats['seleccionados'] ?></div>
+                <div class="kpi-counter-label">Seleccionados</div>
+            </div>
+            <div class="kpi-counter-icon" style="margin-left: auto; color: #15803d;">
+                <?= IconHelper::render('check-circle', 20) ?>
+            </div>
+        </div>
+
+        <div class="kpi-counter-card" style="background: #f0fdf4;">
             <div>
                 <div class="kpi-counter-number" style="color: #047857;"><?= $stats['vinculados'] ?></div>
                 <div class="kpi-counter-label">Vinculados Formales</div>
             </div>
-            <div class="kpi-counter-icon" style="margin-left: auto;">🎓</div>
+            <div class="kpi-counter-icon" style="margin-left: auto; color: #047857;">
+                <?= IconHelper::render('briefcase', 20) ?>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- ========================================================================
-     Bandeja de Convocatorias Activas / Mis Postulaciones
-     ======================================================================== -->
+<!-- Bandeja de Convocatorias Activas / Mis Postulaciones -->
 <?php if ($esCandidato): ?>
     <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 10px; padding: 1.5rem; margin-bottom: 2rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b;">Mis Postulaciones Activas</h3>
+            <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b;">Mis Postulaciones Activas</h3>
             <a href="<?= BASE_URL ?>/index.php?c=Convocatoria&a=index" class="btn btn-primary btn-sm">Ver Convocatorias Abiertas</a>
         </div>
 
         <?php if (empty($misPostulaciones)): ?>
-            <p style="color: #64748b; font-size: 0.9rem;">Aún no ha iniciado ninguna postulación. Puede postularse a una de las convocatorias vigentes.</p>
+            <p style="color: #64748b; font-size: 0.88rem;">Aún no ha iniciado ninguna postulación.</p>
         <?php else: ?>
             <div class="table-responsive">
                 <table class="cecar-table">
@@ -199,7 +202,7 @@ $usuario = AuthHelper::getUsuarioActual();
                                         </a>
                                     <?php elseif ($mp['estado'] === 'subsanacion_requerida'): ?>
                                         <a href="<?= BASE_URL ?>/index.php?c=Postulacion&a=subsanar&id=<?= $mp['id'] ?>" class="btn btn-danger btn-sm">
-                                            ⚠️ Subsanar Ítems
+                                            Subsanar Ítems
                                         </a>
                                     <?php else: ?>
                                         <a href="<?= BASE_URL ?>/index.php?c=Postulacion&a=constancia&id=<?= $mp['id'] ?>" class="btn btn-secondary btn-sm">
@@ -215,11 +218,13 @@ $usuario = AuthHelper::getUsuarioActual();
         <?php endif; ?>
     </div>
 <?php else: ?>
-    <!-- Staff View of Convocatorias -->
     <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 10px; padding: 1.5rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
-            <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b;">Procesos de Convocatoria en Curso</h3>
-            <a href="<?= BASE_URL ?>/index.php?c=Convocatoria&a=crear" class="btn btn-primary btn-sm">➕ Nueva Convocatoria</a>
+            <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b;">Procesos de Convocatoria en Curso</h3>
+            <a href="<?= BASE_URL ?>/index.php?c=Convocatoria&a=crear" class="btn btn-primary btn-sm">
+                <?= IconHelper::render('plus', 14) ?>
+                <span>Nueva Convocatoria</span>
+            </a>
         </div>
 
         <div class="table-responsive">
@@ -247,7 +252,7 @@ $usuario = AuthHelper::getUsuarioActual();
                             <td><?= (int)$c['vacantes'] ?></td>
                             <td><?= FormatHelper::fechaCorta($c['fecha_cierre']) ?></td>
                             <td>
-                                <span class="badge" style="background: #e0f2fe; color: #0369a1; padding: 0.2rem 0.6rem; border-radius: 9999px; font-weight: 700;">
+                                <span class="badge" style="background: #f1f5f9; color: #334155; font-weight: 700;">
                                     <?= (int)$c['total_postulados'] ?>
                                 </span>
                             </td>

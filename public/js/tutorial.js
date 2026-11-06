@@ -17,7 +17,9 @@ function toggleTutorialModal() {
             <div style="background: #ffffff; border-radius: 14px; max-width: 600px; width: 90%; padding: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.3); border-top: 5px solid #10b981; position: relative;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
                     <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <span style="background: #ecfdf5; color: #059669; padding: 0.4rem; border-radius: 50%; font-size: 1.2rem;">💡</span>
+                        <span style="background: #ecfdf5; color: #059669; padding: 0.4rem; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        </span>
                         <h3 style="color: #0b6b44; font-size: 1.25rem; font-weight: 800; margin: 0;">Tutorial y Guía del Sistema CECAR</h3>
                     </div>
                     <button onclick="toggleTutorialModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #94a3b8;">&times;</button>

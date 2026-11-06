@@ -1,19 +1,21 @@
 <?php
 /**
  * views/contratacion/expediente.php
- * Documentos para Aprobación y Expediente de Contratación (Exacto a Imagen 3)
+ * Documentos para Aprobación y Expediente de Contratación (Imagen 3 - Limpio y Sin Emojis)
  */
 use App\Helpers\FormatHelper;
 use App\Helpers\AuthHelper;
+use App\Helpers\IconHelper;
 ?>
 
 <!-- Header -->
 <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
     <div>
-        <a href="<?= BASE_URL ?>/index.php?c=Contratacion&a=index" style="color: #10b981; font-size: 0.88rem; font-weight: 700; text-decoration: none;">
-            &larr; Volver a Gestión de Contratación
+        <a href="<?= BASE_URL ?>/index.php?c=Contratacion&a=index" style="color: #10b981; font-size: 0.88rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
+            <?= IconHelper::render('arrow-left', 14) ?>
+            <span>Volver a Gestión de Contratación</span>
         </a>
-        <h1 style="color: #0b6b44; font-size: 1.5rem; font-weight: 800; margin-top: 0.25rem;">
+        <h1 style="color: #0b6b44; font-size: 1.5rem; font-weight: 800; margin-top: 0.35rem;">
             Documentos para Aprobación
         </h1>
         <p style="color: #64748b; font-size: 0.88rem;">
@@ -24,7 +26,7 @@ use App\Helpers\AuthHelper;
     </div>
 
     <div style="display: flex; gap: 0.75rem; align-items: center;">
-        <span class="badge" style="background: #065f46; color: #34d399; font-size: 0.85rem; padding: 0.4rem 0.85rem; border-radius: 9999px; font-weight: 800;">
+        <span class="badge" style="background: #065f46; color: #34d399; font-size: 0.85rem; padding: 0.4rem 0.85rem; border-radius: 4px; font-weight: 700;">
             Estado: <?= strtoupper($postulacion['estado']) ?>
         </span>
     </div>
@@ -32,9 +34,7 @@ use App\Helpers\AuthHelper;
 
 <!-- Main 2-Column Grid -->
 <div style="display: grid; grid-template-columns: 340px 1fr; gap: 1.5rem; align-items: start;">
-    <!-- ========================================================================
-         Columna Izquierda: Acordeón de Categorías Documentales (Exacto a Imagen 3)
-         ======================================================================== -->
+    <!-- Columna Izquierda: Acordeón de Categorías Documentales (Exacto a Imagen 3) -->
     <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 10px; padding: 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.03);">
         <h3 style="font-size: 0.95rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;">
             Estructura Documental
@@ -42,7 +42,7 @@ use App\Helpers\AuthHelper;
 
         <!-- Filtros superiores del acordeón (Exacto a Imagen 3) -->
         <div style="margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.5rem;">
-            <input type="text" id="searchDocumentInput" class="filter-control" style="width: 100%;" placeholder="🔍 Buscar documento...">
+            <input type="text" id="searchDocumentInput" class="filter-control" style="width: 100%;" placeholder="Buscar documento...">
             <select class="filter-control" style="width: 100%;">
                 <option value="">Todos los estados</option>
                 <option value="aprobado">Aprobados</option>
@@ -76,7 +76,9 @@ use App\Helpers\AuthHelper;
                 <div class="accordion-category">
                     <div class="accordion-header <?= $isBancaria ? 'active' : '' ?>">
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
-                            <span style="font-size: 0.8rem; color: #10b981;">📁</span>
+                            <span style="color: #10b981; display: inline-flex;">
+                                <?= IconHelper::render('folder', 15) ?>
+                            </span>
                             <span><?= htmlspecialchars($catData['titulo'], ENT_QUOTES, 'UTF-8') ?></span>
                         </div>
                         <span class="accordion-badge"><?= $pillCount ?></span>
@@ -90,8 +92,10 @@ use App\Helpers\AuthHelper;
                                 <?php foreach ($catData['items'] as $doc): ?>
                                     <div class="document-item-row" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.6rem 0.75rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem;">
                                         <div style="display: flex; align-items: center; gap: 0.5rem; overflow: hidden;">
-                                            <!-- Green check circle if Davivienda or approved matching screenshot -->
-                                            <span style="color: #10b981; font-weight: 800; font-size: 0.9rem;">✔️</span>
+                                            <!-- Check icon verde -->
+                                            <span style="color: #10b981; display: inline-flex;">
+                                                <?= IconHelper::render('check', 14) ?>
+                                            </span>
                                             <span style="font-weight: 600; color: #1e293b; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;" title="<?= htmlspecialchars($doc['titulo'], ENT_QUOTES, 'UTF-8') ?>">
                                                 <?= htmlspecialchars($doc['titulo'], ENT_QUOTES, 'UTF-8') ?>
                                             </span>
@@ -111,18 +115,18 @@ use App\Helpers\AuthHelper;
         </div>
     </div>
 
-    <!-- ========================================================================
-         Columna Derecha: Panel de Formalización, Salud Ocupacional y Vinculación
-         ======================================================================== -->
+    <!-- Columna Derecha: Panel de Formalización, Salud Ocupacional y Vinculación -->
     <div style="display: flex; flex-direction: column; gap: 1.5rem;">
         <!-- Tarjeta de Salud Ocupacional (RF-101, RN-027) -->
         <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 10px; padding: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.03);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                 <div style="display: flex; align-items: center; gap: 0.6rem;">
-                    <span style="font-size: 1.25rem; color: #0284c7;">🏥</span>
+                    <span style="color: #0284c7; display: inline-flex;">
+                        <?= IconHelper::render('shield', 18) ?>
+                    </span>
                     <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b; margin: 0;">Examen Médico Ocupacional de Ingreso</h3>
                 </div>
-                <span class="badge" style="background: #10b981; color: #ffffff; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">
+                <span class="badge" style="background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 4px;">
                     Concepto: <?= strtoupper($examen['concepto_aptitud'] ?? 'APTO') ?>
                 </span>
             </div>
@@ -131,7 +135,7 @@ use App\Helpers\AuthHelper;
                 Fecha de examen: <strong><?= FormatHelper::fechaCorta($examen['fecha_examen'] ?? '2026-10-22') ?></strong>
             </p>
             <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 0.75rem; color: #166534; font-size: 0.82rem;">
-                🛡️ <strong>Garantía de Confidencialidad (RNF-028, RN-027):</strong> La plataforma registra únicamente el dictamen de aptitud laboral para el cargo sin exponer diagnósticos clínicos confidenciales.
+                <strong>Garantía de Confidencialidad (RNF-028, RN-027):</strong> La plataforma registra únicamente el dictamen de aptitud laboral para el cargo sin exponer diagnósticos clínicos confidenciales.
             </div>
         </div>
 
@@ -139,10 +143,12 @@ use App\Helpers\AuthHelper;
         <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 10px; padding: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.03);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                 <div style="display: flex; align-items: center; gap: 0.6rem;">
-                    <span style="font-size: 1.25rem; color: #059669;">✒️</span>
+                    <span style="color: #059669; display: inline-flex;">
+                        <?= IconHelper::render('edit', 18) ?>
+                    </span>
                     <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b; margin: 0;">Minuta de Contrato y Estados de Firma</h3>
                 </div>
-                <span class="badge" style="background: #065f46; color: #34d399; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 9999px;">
+                <span class="badge" style="background: #065f46; color: #34d399; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 4px;">
                     Firma: <?= strtoupper($contratacion['estado_formalizacion'] ?? 'FIRMADO') ?>
                 </span>
             </div>
@@ -168,20 +174,23 @@ use App\Helpers\AuthHelper;
                 </div>
 
                 <button type="submit" class="btn btn-secondary btn-sm" style="font-weight: 700;">
-                    💾 Actualizar Estado de Formalización
+                    <?= IconHelper::render('check', 14) ?>
+                    <span>Actualizar Estado de Formalización</span>
                 </button>
             </form>
         </div>
 
-        <!-- Tarjeta de Vinculación y Transferencia a Hoja de Vida Institucional (RF-104, RF-105, RF-106, RN-025) -->
+        <!-- Tarjeta de Vinculación y Transferencia a Hoja de Vida Institucional (RF-104 a RF-106) -->
         <div style="background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px; padding: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.03);">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                 <div style="display: flex; align-items: center; gap: 0.6rem;">
-                    <span style="font-size: 1.25rem; color: #166534;">🎓</span>
+                    <span style="color: #166534; display: inline-flex;">
+                        <?= IconHelper::render('briefcase', 18) ?>
+                    </span>
                     <h3 style="font-size: 1.05rem; font-weight: 800; color: #14532d; margin: 0;">Vinculación Laboral e Integración Institucional</h3>
                 </div>
                 <?php if (!empty($vinculacion)): ?>
-                    <span class="badge" style="background: #15803d; color: #ffffff; font-weight: 800; padding: 0.3rem 0.75rem; border-radius: 9999px;">
+                    <span class="badge" style="background: #15803d; color: #ffffff; font-weight: 800; padding: 0.3rem 0.75rem; border-radius: 4px;">
                         VINCULADO FORMALMENTE
                     </span>
                 <?php endif; ?>
@@ -200,7 +209,9 @@ use App\Helpers\AuthHelper;
                         </div>
                         <div>
                             <span style="font-size: 0.78rem; color: #64748b; display: block;">Sincronización Hoja de Vida:</span>
-                            <span style="color: #10b981; font-weight: 700;">✔️ 200 OK (Transferido sin duplicar)</span>
+                            <span style="color: #10b981; font-weight: 700; display: inline-flex; align-items: center; gap: 0.25rem;">
+                                <?= IconHelper::render('check', 14) ?> 200 OK (Transferido)
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -219,7 +230,8 @@ use App\Helpers\AuthHelper;
                         </div>
 
                         <button type="submit" class="btn btn-primary" style="background: #047857; padding: 0.55rem 1.25rem; font-weight: 700;">
-                            🎓 Confirmar Vinculación y Sincronizar HV
+                            <?= IconHelper::render('check-circle', 16) ?>
+                            <span>Confirmar Vinculación y Sincronizar HV</span>
                         </button>
                     </div>
                 </form>

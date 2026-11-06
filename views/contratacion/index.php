@@ -1,17 +1,18 @@
 <?php
 /**
  * views/contratacion/index.php
- * Gestión de Contratación de Seleccionados (Exacto a Imagen 2)
+ * Gestión de Contratación de Seleccionados (Imagen 2 - Estilo Limpio y Sin Emojis)
  */
 use App\Helpers\FormatHelper;
+use App\Helpers\IconHelper;
 ?>
 
-<!-- ========================================================================
-     Encabezado de Página (Exacto a Imagen 2)
-     ======================================================================== -->
+<!-- Encabezado de Página (Imagen 2) -->
 <div style="margin-bottom: 1.5rem;">
     <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
-        <span style="color: #10b981; font-size: 1.35rem;">📄</span>
+        <span style="color: #0b6b44; display: inline-flex;">
+            <?= IconHelper::render('file-text', 22) ?>
+        </span>
         <h1 style="color: #0b6b44; font-size: 1.45rem; font-weight: 800; letter-spacing: -0.01em;">
             Gestión de Contratación de Seleccionados
         </h1>
@@ -21,68 +22,78 @@ use App\Helpers\FormatHelper;
     </p>
 </div>
 
-<!-- ========================================================================
-     6 Contadores KPI Superiores (Exacto a Imagen 2)
-     ======================================================================== -->
+<!-- 6 Contadores KPI Superiores (Exacto a Imagen 2 - Sin Emojis) -->
 <div class="kpi-counters-row" style="grid-template-columns: repeat(6, 1fr);">
     <!-- 1. Usuarios -->
     <div class="kpi-counter-card">
         <div class="kpi-counter-number"><?= $kpis['usuarios'] ?></div>
         <div class="kpi-counter-label">Usuarios</div>
-        <div class="kpi-counter-icon" style="margin-left: auto;">👥</div>
+        <div class="kpi-counter-icon" style="margin-left: auto; color: #64748b;">
+            <?= IconHelper::render('users', 18) ?>
+        </div>
     </div>
 
     <!-- 2. Documentos -->
     <div class="kpi-counter-card">
         <div class="kpi-counter-number"><?= $kpis['documentos'] ?></div>
         <div class="kpi-counter-label">Documentos</div>
-        <div class="kpi-counter-icon" style="margin-left: auto;">📋</div>
+        <div class="kpi-counter-icon" style="margin-left: auto; color: #64748b;">
+            <?= IconHelper::render('file-text', 18) ?>
+        </div>
     </div>
 
     <!-- 3. Aprobados -->
     <div class="kpi-counter-card">
-        <div class="kpi-counter-number"><?= $kpis['aprobados'] ?></div>
+        <div class="kpi-counter-number" style="color: #15803d;"><?= $kpis['aprobados'] ?></div>
         <div class="kpi-counter-label">Aprobados</div>
-        <div class="kpi-counter-icon" style="margin-left: auto; color: #10b981;">✔️</div>
+        <div class="kpi-counter-icon" style="margin-left: auto; color: #15803d;">
+            <?= IconHelper::render('check', 18) ?>
+        </div>
     </div>
 
     <!-- 4. Pendientes Revisión -->
     <div class="kpi-counter-card">
-        <div class="kpi-counter-number" style="color: #d97706;"><?= $kpis['pendientes'] ?></div>
+        <div class="kpi-counter-number" style="color: #b45309;"><?= $kpis['pendientes'] ?></div>
         <div class="kpi-counter-label">Pendientes Revisión</div>
-        <div class="kpi-counter-icon" style="margin-left: auto; color: #f59e0b;">⏳</div>
+        <div class="kpi-counter-icon" style="margin-left: auto; color: #b45309;">
+            <?= IconHelper::render('clock', 18) ?>
+        </div>
     </div>
 
     <!-- 5. Rechazados -->
     <div class="kpi-counter-card">
-        <div class="kpi-counter-number" style="color: #dc2626;"><?= $kpis['rechazados'] ?></div>
+        <div class="kpi-counter-number" style="color: #b91c1c;"><?= $kpis['rechazados'] ?></div>
         <div class="kpi-counter-label">Rechazados</div>
-        <div class="kpi-counter-icon" style="margin-left: auto; color: #ef4444;">❌</div>
+        <div class="kpi-counter-icon" style="margin-left: auto; color: #b91c1c;">
+            <?= IconHelper::render('x', 18) ?>
+        </div>
     </div>
 
     <!-- 6. Subsanados -->
     <div class="kpi-counter-card">
-        <div class="kpi-counter-number" style="color: #10b981;"><?= $kpis['subsanados'] ?></div>
+        <div class="kpi-counter-number" style="color: #15803d;"><?= $kpis['subsanados'] ?></div>
         <div class="kpi-counter-label">Subsanados</div>
-        <div class="kpi-counter-icon" style="margin-left: auto; color: #10b981;">🔄</div>
+        <div class="kpi-counter-icon" style="margin-left: auto; color: #15803d;">
+            <?= IconHelper::render('refresh', 18) ?>
+        </div>
     </div>
 </div>
 
-<!-- ========================================================================
-     Tarjeta de Filtros: "Mis Documentos por Proceso [1]" (Exacto a Imagen 2)
-     ======================================================================== -->
+<!-- Tarjeta de Filtros: "Mis Documentos por Proceso [1]" (Exacto a Imagen 2) -->
 <form action="<?= BASE_URL ?>/index.php" method="GET" class="filter-card">
     <input type="hidden" name="c" value="Contratacion">
     <input type="hidden" name="a" value="index">
 
     <div class="filter-card-header">
         <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span>📁 Mis Documentos por Proceso</span>
+            <?= IconHelper::render('folder', 16) ?>
+            <span>Mis Documentos por Proceso</span>
             <span class="count-pill"><?= count($seleccionados) ?></span>
         </div>
         <div style="display: flex; gap: 0.5rem;">
             <a href="<?= BASE_URL ?>/index.php?c=Contratacion&a=exportarExcel" class="btn btn-sm btn-secondary" style="background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.25); color: #fff;" title="Exportar reporte a Excel (RF-079)">
-                📊 Exportar Excel
+                <?= IconHelper::render('download', 14) ?>
+                <span>Exportar Excel</span>
             </a>
         </div>
     </div>
@@ -120,17 +131,17 @@ use App\Helpers\FormatHelper;
             </select>
 
             <button type="submit" class="btn btn-secondary" style="padding: 0.45rem 0.75rem;" title="Buscar">
-                🔍
+                <?= IconHelper::render('search', 16) ?>
             </button>
             <a href="<?= BASE_URL ?>/index.php?c=Contratacion&a=index" class="btn btn-success" style="padding: 0.45rem 0.75rem;" title="Restablecer filtros">
-                🔄
+                <?= IconHelper::render('refresh', 16) ?>
             </a>
         </div>
 
-        <!-- Fila 2 de Filtros (Exacto a Imagen 2 y 3) -->
+        <!-- Fila 2 de Filtros (Exacto a Imagen 2) -->
         <div class="filter-row" style="align-items: center;">
             <div style="position: relative; flex: 1.2;">
-                <input type="text" id="filterSearchUser" name="buscar_usuario" value="<?= htmlspecialchars($filtros['buscar_usuario'], ENT_QUOTES, 'UTF-8') ?>" class="filter-control" style="width: 100%;" placeholder="🔍 Buscar usuario...">
+                <input type="text" id="filterSearchUser" name="buscar_usuario" value="<?= htmlspecialchars($filtros['buscar_usuario'], ENT_QUOTES, 'UTF-8') ?>" class="filter-control" style="width: 100%;" placeholder="Buscar usuario...">
             </div>
 
             <select name="filtro_incompleto" class="filter-control" style="flex: 0.75;">
@@ -144,7 +155,7 @@ use App\Helpers\FormatHelper;
                 <option value="pendiente">Pendiente</option>
             </select>
 
-            <!-- Dropdown con opciones de Carga y Contratación (Exacto a Imagen 3 Inferior) -->
+            <!-- Dropdown Estado Carga de Documentos (Exacto a Imagen 3 Inferior) -->
             <select name="estado_carga" class="filter-control" style="flex: 1.2;">
                 <option value="">Estado carga de documentos</option>
                 <option value="completa" <?= ($filtros['estado_carga'] === 'completa') ? 'selected' : '' ?>>Carga completa</option>
@@ -158,16 +169,14 @@ use App\Helpers\FormatHelper;
             </select>
 
             <button type="submit" name="autorizados" value="1" class="btn btn-success" style="background: #10b981; font-size: 0.82rem; font-weight: 700;">
-                ⬇️ Autorizados
+                <?= IconHelper::render('check', 14) ?>
+                <span>Autorizados</span>
             </button>
         </div>
     </div>
 </form>
 
-<!-- ========================================================================
-     Tabla de Seleccionados (Exacto a Imagen 2)
-     Columnas: USUARIO, PROCESO, CARGADOS, APROBADOS, PENDIENTES POR REVISIÓN, RECHAZADOS, ACCIÓN
-     ======================================================================== -->
+<!-- Tabla de Seleccionados (Exacto a Imagen 2 - Sin Emojis) -->
 <div class="table-responsive">
     <table class="cecar-table" id="contratacionTable">
         <thead>
@@ -185,9 +194,11 @@ use App\Helpers\FormatHelper;
             <?php if (empty($seleccionados)): ?>
                 <tr>
                     <td colspan="7" style="text-align: center; padding: 3rem 1rem;">
-                        <!-- Empty State (Exacto a Imagen 3 Inferior) -->
+                        <!-- Empty State Limpio (Exacto a Imagen 3 Inferior) -->
                         <div id="tableEmptyState">
-                            <div style="font-size: 2rem; color: #94a3b8; margin-bottom: 0.5rem;">📄</div>
+                            <div style="color: #94a3b8; margin-bottom: 0.5rem; display: inline-flex;">
+                                <?= IconHelper::render('file-text', 40) ?>
+                            </div>
                             <h4 style="color: #475569; font-size: 1.1rem; font-weight: 700; margin-bottom: 0.25rem;">No hay registros</h4>
                             <p style="color: #94a3b8; font-size: 0.88rem;">No se encontraron registros con los filtros aplicados</p>
                         </div>
@@ -220,47 +231,46 @@ use App\Helpers\FormatHelper;
                                 <span style="font-size: 0.8rem; color: #64748b;">
                                     <?= htmlspecialchars($item['facultad'], ENT_QUOTES, 'UTF-8') ?>
                                 </span>
-                                <span class="badge" style="background: #10b981; color: #ffffff; padding: 0.15rem 0.5rem; border-radius: 9999px; font-size: 0.72rem; font-weight: 700;">
+                                <span class="badge" style="background: #10b981; color: #ffffff; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.72rem; font-weight: 700;">
                                     Activo
                                 </span>
                             </div>
                         </td>
 
                         <td style="text-align: center;">
-                            <!-- Pill "23/23 Contratado" matching screenshot -->
-                            <span style="background: #065f46; color: #34d399; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.8rem; font-weight: 800; display: inline-block;">
+                            <!-- Píldora "23/23 Contratado" -->
+                            <span style="background: #065f46; color: #34d399; padding: 0.35rem 0.75rem; border-radius: 4px; font-size: 0.8rem; font-weight: 700; display: inline-block;">
                                 <?= $item['total_cargados'] ?>/<?= $item['total_cargados'] ?> <?= ucfirst($item['estado_postulacion']) ?>
                             </span>
                         </td>
 
                         <td style="text-align: center;">
-                            <!-- Circle green badge "23" matching screenshot -->
+                            <!-- Círculo verde "23" -->
                             <span style="background: #10b981; color: #ffffff; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.82rem; font-weight: 800;">
                                 <?= $item['total_aprobados'] ?>
                             </span>
                         </td>
 
                         <td style="text-align: center;">
-                            <!-- Pendientes Icon / Count -->
-                            <span style="color: #f59e0b; font-weight: 700; font-size: 0.9rem;">
-                                <?= $item['total_pendientes'] > 0 ? '⚠️ ' . $item['total_pendientes'] : '🕒 0' ?>
+                            <span style="color: #64748b; font-weight: 600; font-size: 0.88rem;">
+                                <?= $item['total_pendientes'] ?>
                             </span>
                         </td>
 
                         <td style="text-align: center;">
-                            <!-- Rechazados Icon / Count -->
-                            <span style="color: #ef4444; font-weight: 700; font-size: 0.9rem;">
-                                <?= $item['total_rechazados'] > 0 ? '❌ ' . $item['total_rechazados'] : '🚫 0' ?>
+                            <span style="color: #64748b; font-weight: 600; font-size: 0.88rem;">
+                                <?= $item['total_rechazados'] ?>
                             </span>
                         </td>
 
                         <td style="text-align: center;">
                             <div style="display: flex; gap: 0.35rem; justify-content: center;">
-                                <a href="<?= BASE_URL ?>/index.php?c=Contratacion&a=expediente&id=<?= $item['postulacion_id'] ?>" class="btn btn-secondary btn-sm" title="Ver Documentos para aprobación (Imagen 3)" style="background: #f1f5f9; border-color: #cbd5e1;">
-                                    👁️ Ver
+                                <a href="<?= BASE_URL ?>/index.php?c=Contratacion&a=expediente&id=<?= $item['postulacion_id'] ?>" class="btn btn-secondary btn-sm" title="Ver Documentos para aprobación">
+                                    <?= IconHelper::render('eye', 14) ?>
+                                    <span>Ver</span>
                                 </a>
                                 <a href="<?= BASE_URL ?>/index.php?c=Kanban&a=lineaTiempo&id=<?= $item['postulacion_id'] ?>" class="btn btn-secondary btn-sm" title="Historial y Trazabilidad (RF-059)">
-                                    ⏱️
+                                    <?= IconHelper::render('clock', 14) ?>
                                 </a>
                             </div>
                         </td>

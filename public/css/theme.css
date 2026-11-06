@@ -819,3 +819,159 @@ body {
     width: 100%;
   }
 }
+
+/* ==========================================================================
+   Notificaciones Dropdown Fix
+   ========================================================================== */
+#notifDropdown.open {
+  display: block !important;
+}
+
+/* ==========================================================================
+   Pantallas y Estados de Carga Institucionales (Login & Autenticación)
+   ========================================================================== */
+@keyframes cecarSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes cecarPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.45);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 16px rgba(16, 185, 129, 0);
+  }
+}
+
+@keyframes cecarShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes cecarShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+.cecar-loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(7, 19, 16, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.cecar-loading-overlay.active {
+  display: flex !important;
+  opacity: 1;
+}
+
+.cecar-loading-card {
+  background: #0d211c;
+  border: 1px solid #16362e;
+  border-radius: 16px;
+  padding: 2.25rem 2rem;
+  width: 90%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(16, 185, 129, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.cecar-loading-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #0b6b44, #10b981, #34d399, #10b981, #0b6b44);
+  background-size: 200% 100%;
+  animation: cecarShimmer 2s infinite linear;
+}
+
+.cecar-loading-logo {
+  width: 52px;
+  height: 52px;
+  background: #10b981;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 1.25rem;
+  animation: cecarPulse 2s infinite ease-in-out;
+}
+
+.cecar-loading-title {
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.01em;
+}
+
+.cecar-loading-subtitle {
+  color: #94a3b8;
+  font-size: 0.82rem;
+  margin-bottom: 1.25rem;
+}
+
+.cecar-dual-ring {
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(16, 185, 129, 0.15);
+  border-top-color: #10b981;
+  border-right-color: #34d399;
+  border-radius: 50%;
+  margin: 0 auto 1.25rem;
+  animation: cecarSpin 0.85s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+}
+
+.cecar-progress-wrap {
+  height: 6px;
+  width: 100%;
+  background: #16362e;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin: 1.25rem 0 0.5rem;
+}
+
+.cecar-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  transition: width 0.35s ease;
+  border-radius: 9999px;
+}
+
+.cecar-loading-step {
+  color: #34d399;
+  font-size: 0.88rem;
+  font-weight: 600;
+  min-height: 22px;
+  transition: all 0.2s ease;
+}
+
+.cecar-loading-hint {
+  color: #64748b;
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.shake-error {
+  animation: cecarShake 0.4s ease-in-out;
+}

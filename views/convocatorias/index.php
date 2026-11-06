@@ -10,7 +10,7 @@ use App\Helpers\AuthHelper;
     </div>
     <?php if ($esGestor): ?>
         <a href="<?= BASE_URL ?>/index.php?c=Convocatoria&a=crear" class="btn btn-primary">
-            ➕ Crear Convocatoria
+            <?= \App\Helpers\IconHelper::render('plus', 16) ?> Crear Convocatoria
         </a>
     <?php endif; ?>
 </div>
@@ -19,7 +19,7 @@ use App\Helpers\AuthHelper;
     <input type="hidden" name="c" value="Convocatoria">
     <input type="hidden" name="a" value="index">
 
-    <input type="text" name="buscar" value="<?= htmlspecialchars($filtros['buscar'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="filter-control" style="flex: 2; min-width: 200px;" placeholder="🔍 Buscar por cargo o código...">
+    <input type="text" name="buscar" value="<?= htmlspecialchars($filtros['buscar'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="filter-control" style="flex: 2; min-width: 200px;" placeholder="Buscar por cargo o código...">
 
     <input type="text" name="facultad" value="<?= htmlspecialchars($filtros['facultad'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="filter-control" style="flex: 1.5; min-width: 180px;" placeholder="Facultad o Dependencia...">
 
@@ -54,7 +54,7 @@ use App\Helpers\AuthHelper;
                     </p>
 
                     <div style="background: #f8fafc; border-radius: 6px; padding: 0.65rem 0.85rem; font-size: 0.8rem; color: #475569; margin-bottom: 1.25rem;">
-                        <span>🗓️ <strong>Cierre de postulación:</strong> <?= FormatHelper::fecha($c['fecha_cierre']) ?></span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.4rem;"><?= \App\Helpers\IconHelper::render('calendar', 14) ?> <strong>Cierre de postulación:</strong> <?= FormatHelper::fecha($c['fecha_cierre']) ?></span>
                     </div>
                 </div>
 

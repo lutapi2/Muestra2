@@ -1,3 +1,6 @@
+<?php
+use App\Helpers\IconHelper;
+?>
 <div style="max-width: 460px; margin: 3rem auto; padding: 2.25rem; background: #0d211c; border: 1px solid #16362e; border-radius: 14px; width: 100%;">
     <div style="text-align: center; margin-bottom: 2rem;">
         <div style="width: 48px; height: 48px; background: #10b981; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; font-size: 1.5rem; margin-bottom: 0.75rem;">
@@ -7,7 +10,11 @@
         <p style="color: #94a3b8; font-size: 0.85rem;">Sistema de Selección y Contratación CECAR</p>
     </div>
 
-    <form action="<?= BASE_URL ?>/index.php?c=Auth&a=doLogin" method="POST">
+    <!-- Error Box for Dynamic AJAX Login -->
+    <div id="loginErrorBox" style="display: none; background: #451a1a; border: 1px solid #ef4444; color: #fca5a5; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.85rem; margin-bottom: 1.25rem; text-align: center;">
+    </div>
+
+    <form action="<?= BASE_URL ?>/index.php?c=Auth&a=doLogin" method="POST" id="loginForm">
         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token ?? '', ENT_QUOTES, 'UTF-8') ?>">
 
         <div style="margin-bottom: 1.25rem;">
@@ -15,13 +22,20 @@
             <input type="email" name="correo" required class="filter-control" style="width: 100%; padding: 0.65rem 0.85rem;" placeholder="ejemplo@cecar.edu.co">
         </div>
 
-        <div style="margin-bottom: 1.5rem;">
+        <div style="margin-bottom: 0.75rem;">
             <label style="display: block; color: #cbd5e1; font-size: 0.82rem; font-weight: 600; margin-bottom: 0.35rem;">Contraseña</label>
             <input type="password" name="password" required class="filter-control" style="width: 100%; padding: 0.65rem 0.85rem;" placeholder="••••••••">
         </div>
 
-        <button type="submit" class="landing-btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem;">
-            Iniciar Sesión
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 1.25rem;">
+            <a href="<?= BASE_URL ?>/index.php?c=Auth&a=recuperar" style="color: #34d399; font-size: 0.8rem; text-decoration: none; font-weight: 500;">
+                ¿Olvidó su contraseña?
+            </a>
+        </div>
+
+        <button type="submit" id="btnLoginSubmit" class="landing-btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem;">
+            <?= IconHelper::render('lock', 16) ?>
+            <span style="margin-left: 0.5rem;">Iniciar Sesión</span>
         </button>
     </form>
 

@@ -1,5 +1,5 @@
 <?php
-use App\Helpers\AuthHelper;
+use App\Helpers\IconHelper;
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -9,6 +9,7 @@ use App\Helpers\AuthHelper;
     <title><?= htmlspecialchars(APP_NAME, ENT_QUOTES, 'UTF-8') ?></title>
     <link rel="stylesheet" href="<?= BASE_URL ?>/css/theme.css">
     <script src="<?= BASE_URL ?>/js/tutorial.js" defer></script>
+    <script src="<?= BASE_URL ?>/js/loading.js" defer></script>
 </head>
 <body class="landing-body">
     <!-- Landing Navigation -->
@@ -33,15 +34,14 @@ use App\Helpers\AuthHelper;
         </div>
     </header>
 
-    <!-- Main Landing View Content -->
     <main style="flex: 1; display: flex; align-items: center;">
         <?= $content ?? '' ?>
     </main>
 
-    <!-- Floating Tutorial Pill (Bottom Left) matching screenshot -->
+    <!-- Floating Tutorial Pill -->
     <a href="javascript:void(0)" onclick="toggleTutorialModal()" class="tutorial-pill-floating">
-        <span style="background: rgba(255,255,255,0.25); border-radius: 50%; width: 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem;">ℹ</span>
-        Tutorial
+        <?= IconHelper::render('help-circle', 16) ?>
+        <span>Tutorial</span>
     </a>
 </body>
 </html>

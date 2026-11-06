@@ -18,6 +18,7 @@ class HomeController {
     }
 
     public function tutorial(Request $request): void {
-        View::render('home.tutorial', [], 'main');
+        $layout = \App\Helpers\AuthHelper::estaAutenticado() ? 'main' : 'landing';
+        View::render('home.tutorial', [], $layout);
     }
 }
