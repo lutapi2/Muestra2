@@ -4,7 +4,7 @@ Sistema integral de gestión de talento humano desarrollado en **PHP** siguiendo
 
 ---
 
-## 🌟 Correspondencia con las Interfaces de Referencia
+## Correspondencia con las Interfaces de Referencia
 
 1. **Página Principal (Imagen 1 - Superior):**
    - Interfaz moderna en modo oscuro (`#071310`).
@@ -48,7 +48,7 @@ Sistema integral de gestión de talento humano desarrollado en **PHP** siguiendo
 
 ---
 
-## 🏗️ Arquitectura por Capas del Software (RNF-023)
+## Arquitectura por Capas del Software (RNF-023)
 
 ```
 plataforma-contratacion/
@@ -125,7 +125,7 @@ plataforma-contratacion/
 
 ---
 
-## 🔑 Credenciales de Acceso Preconfiguradas
+## Credenciales de Acceso Preconfiguradas
 
 Para facilitar la evaluación de los diferentes roles contemplados en el sistema, puede iniciar sesión con las siguientes cuentas o utilizar el **Conmutador Rápido de Roles** disponible en la barra superior:
 
@@ -140,7 +140,7 @@ Para facilitar la evaluación de los diferentes roles contemplados en el sistema
 
 ---
 
-## 🚀 Instrucciones de Ejecución Local
+## Instrucciones de Ejecución Local
 
 ### Opción A: Servidor Interno de PHP (Inmediato)
 Ejecute en la terminal PowerShell dentro del directorio del proyecto:
@@ -156,7 +156,7 @@ El proyecto se encuentra enlazado automáticamente con `C:\xampp\htdocs\platafor
 
 ---
 
-## ✅ Cumplimiento de Requerimientos y Reglas de Negocio
+## Cumplimiento de Requerimientos y Reglas de Negocio
 
 - **Ítems Independientes con Soporte (RN-005, RN-006):** Cada título, certificado laboral, cuenta bancaria o documento legal se almacena como un registro autónomo en `items_hv` con su correspondiente archivo en `soportes`.
 - **Subsanación Controlada (RN-011, RF-049):** Al emitirse una observación, el candidato únicamente puede editar los ítems observados; el resto del expediente se mantiene protegido contra alteraciones.
