@@ -34,7 +34,23 @@ use App\Helpers\IconHelper;
         </div>
     </header>
 
-    <main style="flex: 1; display: flex; align-items: center;">
+    <main style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem 1rem;">
+        <?php $flashes = \App\Helpers\AuthHelper::getFlashes(); ?>
+        <?php if (!empty($flashes)): ?>
+            <div style="max-width: 560px; width: 100%; margin: 0 auto 1.5rem auto;">
+                <?php foreach ($flashes as $flash): 
+                    $bg = '#112d26'; $border = '#10b981'; $color = '#a7f3d0';
+                    if ($flash['tipo'] === 'danger') { $bg = '#451a1a'; $border = '#ef4444'; $color = '#fca5a5'; }
+                    if ($flash['tipo'] === 'warning') { $bg = '#452a10'; $border = '#f59e0b'; $color = '#fde68a'; }
+                    if ($flash['tipo'] === 'info') { $bg = '#1e293b'; $border = '#38bdf8'; $color = '#bae6fd'; }
+                ?>
+                    <div style="background: <?= $bg ?>; border: 1px solid <?= $border ?>; color: <?= $color ?>; padding: 0.85rem 1.25rem; border-radius: 8px; font-size: 0.88rem; margin-bottom: 0.75rem; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+                        <?= htmlspecialchars($flash['mensaje'], ENT_QUOTES, 'UTF-8') ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
         <?= $content ?? '' ?>
     </main>
 

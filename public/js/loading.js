@@ -194,22 +194,81 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 3. Manejo de formulario de registro de aspirantes
     const registerForm = document.getElementById('registerForm');
+    const registerErrorBox = document.getElementById('registerErrorBox');
+    const registerBtn = document.getElementById('btnRegisterSubmit');
+
     if (registerForm) {
         registerForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
             // Verificar si el formulario es válido según HTML5
-            if (!this.checkValidity()) return;
+            if (!this.checkValidity()) {
+                this.reportValidity();
+                return;
+            }
+
+            if (registerErrorBox) {
+                registerErrorBox.style.display = 'none';
+                registerErrorBox.textContent = '';
+            }
+
+            if (registerBtn) {
+                registerBtn.disabled = true;
+            }
 
             CecarLoading.show({
                 title: 'Registro de Aspirante Institucional',
                 subtitle: 'Plataforma de Selección y Contratación CECAR',
                 step: 'Validando datos personales y autorización Ley 1581...',
                 hint: 'Generando cuenta y radicando consentimiento...',
-                progress: 40
+                progress: 30
             });
 
+            const formData = new FormData(registerForm);
+
             setTimeout(() => {
-                CecarLoading.updateProgress(80, 'Creando expediente de candidato...');
+                CecarLoading.updateProgress(65, 'Creando expediente de candidato y protegiendo credenciales...');
             }, 300);
+
+            fetch(registerForm.action, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    CecarLoading.updateProgress(90, '¡Cuenta creada exitosamente!', 'Accediendo al entorno de postulación...');
+                    setTimeout(() => {
+                        CecarLoading.updateProgress(100, 'Bienvenido(a) a CECAR', 'Redirigiendo...');
+                        setTimeout(() => {
+                            window.location.href = data.redirect || 'index.php?c=Dashboard&a=index';
+                        }, 350);
+                    }, 300);
+                } else {
+                    setTimeout(() => {
+                        CecarLoading.hide();
+                        if (registerBtn) registerBtn.disabled = false;
+
+                        if (registerErrorBox) {
+                            registerErrorBox.textContent = data.message || 'Error al procesar el registro.';
+                            registerErrorBox.style.display = 'block';
+                            registerErrorBox.classList.remove('shake-error');
+                            void registerErrorBox.offsetWidth;
+                            registerErrorBox.classList.add('shake-error');
+                        } else {
+                            alert(data.message || 'Error al procesar el registro.');
+                        }
+                    }, 400);
+                }
+            })
+            .catch(err => {
+                // Fallback en caso de error de red
+                registerForm.submit();
+            });
         });
     }
 

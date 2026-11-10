@@ -20,6 +20,35 @@ class Usuario {
         return $user ?: null;
     }
 
+    public static function findByDocumento(string $numeroDocumento): ?array {
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("
+            SELECT u.*, d.nombre as dependencia_nombre, d.facultad, d.sede, r.nombre as rol_nombre
+            FROM usuarios u
+            LEFT JOIN dependencias d ON u.dependencia_id = d.id
+            LEFT JOIN roles r ON u.rol = r.id
+            WHERE u.numero_documento = :numero_documento
+            LIMIT 1
+        ");
+        $stmt->execute([':numero_documento' => trim($numeroDocumento)]);
+        $user = $stmt->fetch();
+        return $user ?: null;
+    }
+
+    public static function existeCorreo(string $correo): bool {
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("SELECT 1 FROM usuarios WHERE LOWER(correo) = LOWER(:correo) LIMIT 1");
+        $stmt->execute([':correo' => trim($correo)]);
+        return (bool)$stmt->fetchColumn();
+    }
+
+    public static function existeDocumento(string $numeroDocumento): bool {
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("SELECT 1 FROM usuarios WHERE numero_documento = :numero_documento LIMIT 1");
+        $stmt->execute([':numero_documento' => trim($numeroDocumento)]);
+        return (bool)$stmt->fetchColumn();
+    }
+
     public static function findById(int $id): ?array {
         $pdo = Database::getConnection();
         $stmt = $pdo->prepare("

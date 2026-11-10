@@ -78,16 +78,41 @@ class AuthController {
         $consentimiento = $request->post('consentimiento_datos');
 
         if (empty($nombres) || empty($apellidos) || empty($numeroDoc) || empty($correo) || empty($password)) {
+            if ($request->isAjax()) {
+                Response::json(['success' => false, 'message' => 'Todos los campos obligatorios deben ser diligenciados.'], 400);
+            }
             AuthHelper::setFlash('danger', 'Todos los campos obligatorios deben ser diligenciados.');
             Response::redirect('c=Auth&a=register');
         }
 
+        if (strlen($password) < 6) {
+            if ($request->isAjax()) {
+                Response::json(['success' => false, 'message' => 'La contraseña debe contener al menos 6 caracteres.'], 400);
+            }
+            AuthHelper::setFlash('danger', 'La contraseña debe contener al menos 6 caracteres.');
+            Response::redirect('c=Auth&a=register');
+        }
+
         if (empty($consentimiento)) {
+            if ($request->isAjax()) {
+                Response::json(['success' => false, 'message' => 'Debe aceptar los términos de tratamiento de datos personales conforme a la política CECAR (RF-015, RN-004).'], 400);
+            }
             AuthHelper::setFlash('danger', 'Debe aceptar los términos de tratamiento de datos personales conforme a la política CECAR (RF-015, RN-004).');
             Response::redirect('c=Auth&a=register');
         }
 
-        if (Usuario::findByEmail($correo)) {
+        if (Usuario::existeDocumento($numeroDoc)) {
+            if ($request->isAjax()) {
+                Response::json(['success' => false, 'message' => 'Ya existe un usuario registrado con este número de documento.'], 400);
+            }
+            AuthHelper::setFlash('warning', 'Ya existe un usuario registrado con este número de documento.');
+            Response::redirect('c=Auth&a=register');
+        }
+
+        if (Usuario::existeCorreo($correo)) {
+            if ($request->isAjax()) {
+                Response::json(['success' => false, 'message' => 'Ya existe una cuenta registrada con este correo electrónico.'], 400);
+            }
             AuthHelper::setFlash('warning', 'Ya existe una cuenta registrada con este correo electrónico.');
             Response::redirect('c=Auth&a=register');
         }
@@ -110,8 +135,20 @@ class AuthController {
             AuditHelper::log('registro_candidato', 'usuarios', $userId);
 
             AuthHelper::setFlash('success', '¡Cuenta de candidato creada exitosamente! Su consentimiento de datos ha sido registrado.');
+            
+            if ($request->isAjax()) {
+                Response::json([
+                    'success' => true,
+                    'message' => '¡Cuenta creada con éxito! Bienvenido(a), ' . $nuevoUsuario['nombres'],
+                    'redirect' => BASE_URL . '/index.php?c=Dashboard&a=index'
+                ]);
+            }
+
             Response::redirect('c=Dashboard&a=index');
         } catch (\Exception $e) {
+            if ($request->isAjax()) {
+                Response::json(['success' => false, 'message' => 'Error al crear la cuenta: ' . $e->getMessage()], 500);
+            }
             AuthHelper::setFlash('danger', 'Error al crear la cuenta: ' . $e->getMessage());
             Response::redirect('c=Auth&a=register');
         }

@@ -4,6 +4,10 @@
         <p style="color: #94a3b8; font-size: 0.85rem;">Cree su cuenta para postular a convocatorias públicas de CECAR</p>
     </div>
 
+    <!-- Error Box for Dynamic AJAX Register -->
+    <div id="registerErrorBox" style="display: none; background: #451a1a; border: 1px solid #ef4444; color: #fca5a5; padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.85rem; margin-bottom: 1.25rem; text-align: center;">
+    </div>
+
     <form action="<?= BASE_URL ?>/index.php?c=Auth&a=doRegister" method="POST" id="registerForm">
         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token ?? '', ENT_QUOTES, 'UTF-8') ?>">
 
@@ -46,7 +50,7 @@
 
         <div style="margin-bottom: 1.25rem;">
             <label style="display: block; color: #cbd5e1; font-size: 0.82rem; font-weight: 600; margin-bottom: 0.35rem;">Contraseña de Acceso</label>
-            <input type="password" name="password" required class="filter-control" style="width: 100%;" placeholder="Mínimo 6 caracteres">
+            <input type="password" name="password" required minlength="6" class="filter-control" style="width: 100%;" placeholder="Mínimo 6 caracteres">
         </div>
 
         <!-- Consentimiento Explícito de Datos Personales (RF-015, HV-001, RN-004, RNF-015) -->
@@ -60,7 +64,7 @@
             </label>
         </div>
 
-        <button type="submit" class="landing-btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem;">
+        <button type="submit" id="btnRegisterSubmit" class="landing-btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem;">
             Registrar Cuenta de Aspirante
         </button>
     </form>
