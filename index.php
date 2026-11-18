@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 /**
- * Redirección o carga de Front Controller desde la raíz
+ * Redirección automática al Front Controller público para despliegues locales (ej. Apache / XAMPP).
  */
-require_once __DIR__ . '/public/index.php';
+header('Location: public/');
+exit;

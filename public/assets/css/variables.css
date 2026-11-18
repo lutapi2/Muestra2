@@ -1,0 +1,126 @@
+/**
+ * Tokens de Diseño CSS - Sistema de Selección CECAR v3.0 (2026)
+ * Extraídos y calibrados a partir de los mockups oficiales de CECAR.
+ * Combina identidad corporativa (verde pino profundo, verde esmeralda y acentos)
+ * con criterios de accesibilidad WCAG 2.1 AA (contraste >= 4.5:1).
+ */
+
+:root {
+  /* =========================================================================
+   * 1. Paleta de Colores Observada en Mockups
+   * ========================================================================= */
+  
+  /* Verde Corporativo Institucional (Página 1, 2 y 3) */
+  --color-brand-primary: #006633;        /* Verde institucional base */
+  --color-brand-primary-hover: #004d26;
+  --color-brand-primary-light: #e8f5e9;
+  
+  /* Verde Acento y Resaltados Hero / Botones Principales (Página 1) */
+  --color-accent-emerald: #22c55e;       /* Resaltado 'gestión administrativa' y CTA */
+  --color-accent-emerald-hover: #16a34a;
+  --color-accent-emerald-light: #dcfce7;
+  --color-accent-lime: #84cc16;          /* Pill 'Tutorial' y badges activos */
+  
+  /* Fondo Profundo Hero (Página 1 - Modo Oscuro Hero) */
+  --color-hero-bg-deep: #07170f;
+  --color-hero-bg-mid: #0d281a;
+  --color-hero-bg-card: rgba(22, 38, 29, 0.85);
+  --color-hero-border: rgba(34, 197, 94, 0.2);
+  --color-hero-text: #ffffff;
+  --color-hero-text-muted: #9ca3af;
+
+  /* Fondo Aplicación e Interfaz Administrativa (Páginas 2 y 3 - Modo Claro) */
+  --color-bg-app: #f4f6f8;               /* Fondo gris suave observador */
+  --color-bg-surface: #ffffff;           /* Fondo de tarjetas y tablas */
+  --color-bg-surface-alt: #f9fafb;       /* Fondo alterno para inputs y listas */
+  --color-border: #d1d5db;               /* Bordes generales */
+  --color-border-subtle: #e5e7eb;
+  --color-border-focus: #16a34a;
+
+  /* Barra Lateral y Encabezados Oscuros de Tabla (Páginas 2 y 3) */
+  --color-sidebar-bg: #14281e;           /* Verde pino oscuro de barra lateral */
+  --color-sidebar-hover: #1d3a2c;
+  --color-sidebar-active: #22c55e;
+  --color-sidebar-text: #e5e7eb;
+  --color-table-header-bg: #1e2e25;      /* Barra 'Mis Documentos por Proceso' */
+
+  /* Banner de Bienvenida Degradado (Página 1 y 2) */
+  --gradient-welcome: linear-gradient(135deg, #15803d 0%, #16a34a 60%, #22c55e 100%);
+  --gradient-hero: radial-gradient(circle at 75% 30%, #143825 0%, #08170f 70%, #030805 100%);
+
+  /* Textos Generales (Modo Claro) */
+  --color-text-main: #1f2937;            /* Contraste 12.6:1 sobre blanco */
+  --color-text-secondary: #4b5563;       /* Etiquetas y subtítulos */
+  --color-text-muted: #6b7280;           /* Placeholders y metadatos */
+  --color-text-inverse: #ffffff;
+
+  /* =========================================================================
+   * 2. Estados Funcionales Semánticos (KPIs y Badges en Páginas 2 y 3)
+   * ========================================================================= */
+  --color-status-approved: #15803d;      /* Aprobado / Completo (Verde) */
+  --color-status-approved-bg: #dcfce7;
+  --color-status-approved-border: #86efac;
+
+  --color-status-process: #b45309;       /* En proceso / Pendiente revisión (Ámbar) */
+  --color-status-process-bg: #fef3c7;
+  --color-status-process-border: #fde68a;
+
+  --color-status-rejected: #b91c1c;      /* Rechazado / No habilitado (Rojo) */
+  --color-status-rejected-bg: #fee2e2;
+  --color-status-rejected-border: #fca5a5;
+
+  --color-status-subsanado: #0284c7;      /* Subsanación / En revisión (Azul) */
+  --color-status-subsanado-bg: #e0f2fe;
+  --color-status-subsanado-border: #7dd3fc;
+
+  /* =========================================================================
+   * 3. Tipografía y Escala Modular
+   * ========================================================================= */
+  --font-family-base: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  
+  --font-size-xs: 0.75rem;     /* 12px */
+  --font-size-sm: 0.875rem;    /* 14px */
+  --font-size-base: 1rem;      /* 16px */
+  --font-size-lg: 1.125rem;    /* 18px */
+  --font-size-xl: 1.25rem;     /* 20px */
+  --font-size-2xl: 1.5rem;     /* 24px */
+  --font-size-3xl: 1.875rem;   /* 30px */
+  --font-size-4xl: 2.25rem;    /* 36px */
+  --font-size-hero: 2.75rem;   /* 44px (Hero Title) */
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* =========================================================================
+   * 4. Espaciado y Métrica (Módulo 4px / 8px)
+   * ========================================================================= */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+  --space-12: 3rem;    /* 48px */
+  --space-16: 4rem;    /* 64px */
+
+  /* =========================================================================
+   * 5. Bordes, Radios y Sombras
+   * ========================================================================= */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-pill: 9999px; /* Botones hero, pills de tutorial y badges */
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 25px rgba(34, 197, 94, 0.25);
+
+  --focus-ring: 0 0 0 3px rgba(34, 197, 94, 0.35);
+  --transition-normal: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
