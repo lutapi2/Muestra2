@@ -119,6 +119,86 @@
                 </table>
             </div>
         </div>
+
+        <!-- Aspirantes Postulados a esta Vacante (Visible para Gestores y Administradores) -->
+        <?php if ($esGestor): ?>
+            <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 10px; padding: 1.5rem; margin-top: 1.5rem; box-shadow: 0 1px 4px rgba(0,0,0,0.03);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid #f1f5f9; padding-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+                    <div>
+                        <h3 style="font-size: 1.1rem; font-weight: 800; color: #0b6b44; display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                            <?= IconHelper::render('users', 18) ?> Aspirantes Postulados a esta Vacante
+                        </h3>
+                        <p style="color: #64748b; font-size: 0.82rem; margin: 0.2rem 0 0 0;">
+                            Candidatos que han iniciado o radicado su postulación para este cargo institucional.
+                        </p>
+                    </div>
+                    <span class="badge" style="background: #dcfce7; color: #166534; font-weight: 800; font-size: 0.88rem; padding: 0.35rem 0.75rem;">
+                        <?= count($postulantes ?? []) ?> Postulante(s)
+                    </span>
+                </div>
+
+                <?php if (empty($postulantes)): ?>
+                    <div style="text-align: center; padding: 2.5rem 1rem; background: #f8fafc; border-radius: 8px; border: 1px dashed #cbd5e1;">
+                        <div style="color: #94a3b8; margin-bottom: 0.5rem;"><?= IconHelper::render('users', 32) ?></div>
+                        <p style="color: #64748b; font-weight: 600; margin-bottom: 0.25rem;">Aún no se han registrado aspirantes en esta vacante.</p>
+                        <p style="color: #94a3b8; font-size: 0.8rem;">En cuanto un candidato inicie o radique su postulación, se reflejará inmediatamente aquí.</p>
+                    </div>
+                <?php else: ?>
+                    <div class="table-responsive">
+                        <table class="cecar-table">
+                            <thead>
+                                <tr>
+                                    <th>Radicado</th>
+                                    <th>Aspirante</th>
+                                    <th>Documento / Contacto</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Avance HV</th>
+                                    <th style="text-align: center;">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($postulantes as $p): ?>
+                                    <tr>
+                                        <td>
+                                            <strong style="color: #0b6b44; font-family: monospace;"><?= htmlspecialchars($p['codigo_radicado'], ENT_QUOTES, 'UTF-8') ?></strong>
+                                        </td>
+                                        <td>
+                                            <div style="font-weight: 700; color: #1e293b;"><?= htmlspecialchars($p['nombres'] . ' ' . $p['apellidos'], ENT_QUOTES, 'UTF-8') ?></div>
+                                        </td>
+                                        <td>
+                                            <div style="font-size: 0.82rem; color: #475569;">Doc: <?= htmlspecialchars($p['numero_documento'], ENT_QUOTES, 'UTF-8') ?></div>
+                                            <div style="font-size: 0.78rem; color: #64748b;"><?= htmlspecialchars($p['correo'], ENT_QUOTES, 'UTF-8') ?></div>
+                                        </td>
+                                        <td>
+                                            <span style="font-size: 0.8rem; color: #64748b;">
+                                                <?= FormatHelper::fecha($p['fecha_postulacion']) ?>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <?= FormatHelper::badgeEstado($p['estado']) ?>
+                                        </td>
+                                        <td>
+                                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                                <div style="flex: 1; height: 6px; background: #e2e8f0; border-radius: 9999px; overflow: hidden; min-width: 50px;">
+                                                    <div style="width: <?= (int)$p['porcentaje_avance'] ?>%; height: 100%; background: #10b981;"></div>
+                                                </div>
+                                                <span style="font-size: 0.75rem; font-weight: 700; color: #475569;"><?= (int)$p['porcentaje_avance'] ?>%</span>
+                                            </div>
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <a href="<?= BASE_URL ?>/index.php?c=Revision&a=expediente&id=<?= $p['id'] ?>" class="btn btn-primary btn-sm" style="display: inline-flex; align-items: center; gap: 0.3rem;">
+                                                <?= IconHelper::render('search', 14) ?> Revisar Expediente
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
     </div>
 
     <!-- Right Column: Summary Card & Action -->
@@ -134,9 +214,19 @@
                 <div><strong>Cierre Oficial:</strong> <span style="color: #ef4444; font-weight: 700;"><?= FormatHelper::fecha($convocatoria['fecha_cierre']) ?></span></div>
             </div>
 
-            <a href="<?= BASE_URL ?>/index.php?c=Postulacion&a=index&convocatoria_id=<?= $convocatoria['id'] ?>" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem; font-weight: 700;">
-                <?= IconHelper::render('document', 18) ?> Diligenciar Postulación
-            </a>
+            <?php if ($esGestor): ?>
+                <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 0.75rem; text-align: center;">
+                    <div style="font-size: 0.8rem; color: #166534; font-weight: 600;">Aspirantes Postulados</div>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #0b6b44;"><?= count($postulantes ?? []) ?></div>
+                </div>
+                <a href="<?= BASE_URL ?>/index.php?c=Postulacion&a=index&convocatoria_id=<?= $convocatoria['id'] ?>" class="btn btn-secondary" style="width: 100%; justify-content: center; padding: 0.65rem; font-weight: 600; font-size: 0.85rem;">
+                    <?= IconHelper::render('document', 16) ?> Diligenciar Postulación (Prueba)
+                </a>
+            <?php else: ?>
+                <a href="<?= BASE_URL ?>/index.php?c=Postulacion&a=index&convocatoria_id=<?= $convocatoria['id'] ?>" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.75rem; font-weight: 700;">
+                    <?= IconHelper::render('document', 18) ?> Diligenciar Postulación
+                </a>
+            <?php endif; ?>
         </div>
 
         <?php if ($esGestor): ?>

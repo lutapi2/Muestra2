@@ -265,4 +265,75 @@ $usuario = AuthHelper::getUsuarioActual();
             </table>
         </div>
     </div>
+
+    <!-- Postulaciones y Aspirantes Recientes para Administradores -->
+    <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 10px; padding: 1.5rem; margin-top: 1.75rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem;">
+            <div>
+                <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b; display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+                    <?= IconHelper::render('users', 18) ?> Postulaciones y Aspirantes Recientes
+                </h3>
+                <p style="color: #64748b; font-size: 0.82rem; margin: 0.2rem 0 0 0;">
+                    Aspirantes que se han registrado o postulado recientemente a cualquiera de las vacantes institucionales.
+                </p>
+            </div>
+            <a href="<?= BASE_URL ?>/index.php?c=Revision&a=index" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;">
+                <?= IconHelper::render('search', 14) ?> Ir a Revisión Documental
+            </a>
+        </div>
+
+        <?php if (empty($ultimasPostulaciones)): ?>
+            <div style="text-align: center; padding: 2rem; color: #94a3b8; background: #f8fafc; border-radius: 8px;">
+                <p style="margin: 0; font-size: 0.9rem;">No se registran postulaciones recientes en el sistema.</p>
+            </div>
+        <?php else: ?>
+            <div class="table-responsive">
+                <table class="cecar-table">
+                    <thead>
+                        <tr>
+                            <th>Radicado</th>
+                            <th>Aspirante</th>
+                            <th>Convocatoria / Cargo</th>
+                            <th>Facultad</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Avance HV</th>
+                            <th style="text-align: center;">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($ultimasPostulaciones as $up): ?>
+                            <tr>
+                                <td><strong style="color: #0b6b44; font-family: monospace;"><?= htmlspecialchars($up['codigo_radicado'], ENT_QUOTES, 'UTF-8') ?></strong></td>
+                                <td>
+                                    <div style="font-weight: 700; color: #1e293b;"><?= htmlspecialchars($up['nombres'] . ' ' . $up['apellidos'], ENT_QUOTES, 'UTF-8') ?></div>
+                                    <small style="color: #64748b;">Doc: <?= htmlspecialchars($up['numero_documento'], ENT_QUOTES, 'UTF-8') ?></small>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 600; color: #334155;"><?= htmlspecialchars($up['convocatoria_cargo'], ENT_QUOTES, 'UTF-8') ?></div>
+                                    <small class="badge" style="background: #e0f2fe; color: #0284c7; font-size: 0.72rem;"><?= htmlspecialchars($up['convocatoria_codigo'], ENT_QUOTES, 'UTF-8') ?></small>
+                                </td>
+                                <td><?= htmlspecialchars($up['facultad'], ENT_QUOTES, 'UTF-8') ?></td>
+                                <td><span style="font-size: 0.8rem; color: #64748b;"><?= FormatHelper::fecha($up['fecha_postulacion']) ?></span></td>
+                                <td><?= FormatHelper::badgeEstado($up['estado']) ?></td>
+                                <td>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <div style="flex: 1; height: 6px; background: #e2e8f0; border-radius: 9999px; overflow: hidden; min-width: 50px;">
+                                            <div style="width: <?= (int)$up['porcentaje_avance'] ?>%; height: 100%; background: #10b981;"></div>
+                                        </div>
+                                        <span style="font-size: 0.75rem; font-weight: 700; color: #475569;"><?= (int)$up['porcentaje_avance'] ?>%</span>
+                                    </div>
+                                </td>
+                                <td style="text-align: center;">
+                                    <a href="<?= BASE_URL ?>/index.php?c=Revision&a=expediente&id=<?= $up['id'] ?>" class="btn btn-primary btn-sm" style="display: inline-flex; align-items: center; gap: 0.3rem;">
+                                        <?= IconHelper::render('search', 14) ?> Revisar
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endif; ?>
+    </div>
 <?php endif; ?>

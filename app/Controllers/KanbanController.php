@@ -4,8 +4,11 @@ class KanbanController {
     public function index(Request $request): void {
         AuthHelper::exigirRol(['admin', 'talento_humano', 'revisor', 'entrevistador']);
 
-        $convocatoriaId = (int)$request->get('convocatoria_id', 1);
         $convocatorias = Convocatoria::getAll();
+        $convocatoriaId = (int)$request->get('convocatoria_id', 0);
+        if ($convocatoriaId === 0 && !empty($convocatorias)) {
+            $convocatoriaId = (int)$convocatorias[0]['id'];
+        }
 
         $pdo = Database::getConnection();
 

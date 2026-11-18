@@ -41,10 +41,24 @@ class ConvocatoriaController {
         $stmtCrit->execute([':id' => $id]);
         $criterios = $stmtCrit->fetchAll();
 
+        // Obtener la lista completa de aspirantes que se han postulado a esta vacante
+        $stmtPost = $pdo->prepare("
+            SELECT p.*, u.nombres, u.apellidos, u.numero_documento, u.correo, u.telefono,
+                   (SELECT COUNT(*) FROM items_hv WHERE postulacion_id = p.id) as total_items,
+                   (SELECT COUNT(*) FROM items_hv WHERE postulacion_id = p.id AND estado = 'aprobado') as items_aprobados
+            FROM postulaciones p
+            JOIN usuarios u ON p.usuario_id = u.id
+            WHERE p.convocatoria_id = :cid
+            ORDER BY p.fecha_postulacion DESC
+        ");
+        $stmtPost->execute([':cid' => $id]);
+        $postulantes = $stmtPost->fetchAll();
+
         View::render('convocatorias.detalle', [
             'convocatoria' => $convocatoria,
             'requisitos' => $requisitos,
             'criterios' => $criterios,
+            'postulantes' => $postulantes,
             'esGestor' => AuthHelper::esTalentoHumano(),
             'csrf_token' => $request->getCsrfToken()
         ], 'main');

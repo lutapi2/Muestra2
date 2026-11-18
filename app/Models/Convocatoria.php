@@ -41,6 +41,7 @@ class Convocatoria {
         $pdo = Database::getConnection();
         $stmt = $pdo->prepare("
             SELECT c.*, d.nombre as dependencia_nombre, d.sede as sede_nombre,
+                   (SELECT COUNT(*) FROM postulaciones p WHERE p.convocatoria_id = c.id) as total_postulados,
                    pc.formacion_minima, pc.experiencia_minima_meses, pc.competencias, pc.funciones, pc.condiciones
             FROM convocatorias c
             LEFT JOIN dependencias d ON c.dependencia_id = d.id

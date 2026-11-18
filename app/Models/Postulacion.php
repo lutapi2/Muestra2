@@ -33,9 +33,20 @@ class Postulacion {
         return $res ?: null;
     }
 
+    public static function generarRadicadoUnico(): string {
+        $pdo = Database::getConnection();
+        do {
+            $codigo = sprintf('RAD-%s-%05d', date('Y'), mt_rand(1, 99999));
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM postulaciones WHERE codigo_radicado = :cod");
+            $stmt->execute([':cod' => $codigo]);
+            $existe = (int)$stmt->fetchColumn() > 0;
+        } while ($existe);
+        return $codigo;
+    }
+
     public static function iniciar(int $usuarioId, int $convocatoriaId): int {
         $pdo = Database::getConnection();
-        $codigoRadicado = sprintf('RAD-%s-%04d', date('Y'), rand(100, 9999));
+        $codigoRadicado = self::generarRadicadoUnico();
 
         $stmt = $pdo->prepare("
             INSERT INTO postulaciones (convocatoria_id, usuario_id, codigo_radicado, estado, resultado_documental, porcentaje_avance, fecha_postulacion)

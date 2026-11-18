@@ -56,8 +56,8 @@
                         <strong>Facultad:</strong> <?= htmlspecialchars($c['facultad'], ENT_QUOTES, 'UTF-8') ?><br>
                         <strong>Modalidad:</strong> <?= htmlspecialchars($c['modalidad'], ENT_QUOTES, 'UTF-8') ?> &bull; 
                         <strong>Vacantes:</strong> <?= (int)$c['vacantes'] ?>
-                        <?php if (isset($c['total_postulados'])): ?>
-                            &bull; <strong>Postulados:</strong> <?= (int)$c['total_postulados'] ?>
+                        <?php if ($esGestor): ?>
+                            &bull; <strong style="color: #0b6b44;">Postulados:</strong> <span class="badge" style="background: #dcfce7; color: #166534; font-weight: 800; font-size: 0.78rem;"><?= (int)$c['total_postulados'] ?></span>
                         <?php endif; ?>
                     </p>
 
@@ -71,8 +71,9 @@
 
                 <div>
                     <div style="display: flex; gap: 0.5rem; justify-content: space-between; align-items: center; margin-bottom: <?= $esGestor ? '0.65rem' : '0' ?>;">
-                        <a href="<?= BASE_URL ?>/index.php?c=Convocatoria&a=detalle&id=<?= $c['id'] ?>" class="btn btn-secondary btn-sm" style="flex: 1; text-align: center;">
-                            Ver Requisitos
+                        <a href="<?= BASE_URL ?>/index.php?c=Convocatoria&a=detalle&id=<?= $c['id'] ?>" class="btn btn-secondary btn-sm" style="flex: 1; text-align: center; font-weight: 600;">
+                            <?= $esGestor ? 'Detalle y Postulantes (' . (int)$c['total_postulados'] . ')' : 'Ver Requisitos' ?>
+                        </a>
                         </a>
                         <a href="<?= BASE_URL ?>/index.php?c=Postulacion&a=index&convocatoria_id=<?= $c['id'] ?>" class="btn btn-primary btn-sm" style="flex: 1; text-align: center;">
                             Postularme
