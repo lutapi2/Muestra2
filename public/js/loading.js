@@ -44,7 +44,8 @@ const CecarLoading = (function () {
         hintEl = document.getElementById('cecarLoadingHint');
     }
 
-    function show(options = {}) {
+    function show(options) {
+        options = options || {};
         initOverlay();
         if (options.title && titleEl) titleEl.textContent = options.title;
         if (options.subtitle && subtitleEl) subtitleEl.textContent = options.subtitle;
@@ -55,12 +56,12 @@ const CecarLoading = (function () {
         overlay.classList.add('active');
     }
 
-    function updateProgress(percent, stepText = '', hintText = '') {
+    function updateProgress(percent, stepText, hintText) {
         if (!overlay) initOverlay();
         if (barEl) barEl.style.width = Math.min(100, Math.max(0, percent)) + '%';
         if (stepText && stepEl) {
             stepEl.style.opacity = '0';
-            setTimeout(() => {
+            setTimeout(function () {
                 stepEl.textContent = stepText;
                 stepEl.style.opacity = '1';
             }, 100);
@@ -75,9 +76,9 @@ const CecarLoading = (function () {
     }
 
     return {
-        show,
-        updateProgress,
-        hide
+        show: show,
+        updateProgress: updateProgress,
+        hide: hide
     };
 })();
 
@@ -117,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const formData = new FormData(loginForm);
 
             // Simular progresión visual fluida
-            setTimeout(() => {
+            setTimeout(function () {
                 CecarLoading.updateProgress(55, 'Comprobando roles y autorizaciones...');
             }, 300);
 
@@ -129,18 +130,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
                 body: formData
             })
-            .then(res => res.json())
-            .then(data => {
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
                 if (data.success) {
                     CecarLoading.updateProgress(85, '¡Credenciales confirmadas!', 'Preparando su entorno...');
-                    setTimeout(() => {
+                    setTimeout(function () {
                         CecarLoading.updateProgress(100, 'Acceso concedido. Redirigiendo...', 'Bienvenido(a)');
-                        setTimeout(() => {
+                        setTimeout(function () {
                             window.location.href = data.redirect || 'index.php?c=Dashboard&a=index';
                         }, 350);
                     }, 300);
                 } else {
-                    setTimeout(() => {
+                    setTimeout(function () {
                         CecarLoading.hide();
                         if (loginBtn) loginBtn.disabled = false;
 
@@ -156,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }, 400);
                 }
             })
-            .catch(err => {
+            .catch(function (err) {
                 // Fallback a envío normal si la red o el endpoint no responden en JSON
                 loginForm.submit();
             });
@@ -165,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 2. Manejo de botones de Acceso Rápido de Prueba (Demo Roles)
     const quickLoginLinks = document.querySelectorAll('a[href*="quickLogin"]');
-    quickLoginLinks.forEach(link => {
+    quickLoginLinks.forEach(function (link) {
         link.addEventListener('click', function (e) {
             e.preventDefault();
             const targetUrl = this.href;
@@ -179,13 +180,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 progress: 35
             });
 
-            setTimeout(() => {
+            setTimeout(function () {
                 CecarLoading.updateProgress(75, 'Aplicando directivas de seguridad para ' + rolNombre + '...');
             }, 250);
 
-            setTimeout(() => {
+            setTimeout(function () {
                 CecarLoading.updateProgress(100, '¡Sesión configurada! Redirigiendo al Dashboard...');
-                setTimeout(() => {
+                setTimeout(function () {
                     window.location.href = targetUrl;
                 }, 300);
             }, 550);
@@ -194,81 +195,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 3. Manejo de formulario de registro de aspirantes
     const registerForm = document.getElementById('registerForm');
-    const registerErrorBox = document.getElementById('registerErrorBox');
-    const registerBtn = document.getElementById('btnRegisterSubmit');
-
     if (registerForm) {
         registerForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-
             // Verificar si el formulario es válido según HTML5
-            if (!this.checkValidity()) {
-                this.reportValidity();
-                return;
-            }
-
-            if (registerErrorBox) {
-                registerErrorBox.style.display = 'none';
-                registerErrorBox.textContent = '';
-            }
-
-            if (registerBtn) {
-                registerBtn.disabled = true;
-            }
+            if (!this.checkValidity()) return;
 
             CecarLoading.show({
                 title: 'Registro de Aspirante Institucional',
                 subtitle: 'Plataforma de Selección y Contratación CECAR',
                 step: 'Validando datos personales y autorización Ley 1581...',
                 hint: 'Generando cuenta y radicando consentimiento...',
-                progress: 30
+                progress: 40
             });
 
-            const formData = new FormData(registerForm);
-
-            setTimeout(() => {
-                CecarLoading.updateProgress(65, 'Creando expediente de candidato y protegiendo credenciales...');
+            setTimeout(function () {
+                CecarLoading.updateProgress(80, 'Creando expediente de candidato...');
             }, 300);
-
-            fetch(registerForm.action, {
-                method: 'POST',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json'
-                },
-                body: formData
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    CecarLoading.updateProgress(90, '¡Cuenta creada exitosamente!', 'Accediendo al entorno de postulación...');
-                    setTimeout(() => {
-                        CecarLoading.updateProgress(100, 'Bienvenido(a) a CECAR', 'Redirigiendo...');
-                        setTimeout(() => {
-                            window.location.href = data.redirect || 'index.php?c=Dashboard&a=index';
-                        }, 350);
-                    }, 300);
-                } else {
-                    setTimeout(() => {
-                        CecarLoading.hide();
-                        if (registerBtn) registerBtn.disabled = false;
-
-                        if (registerErrorBox) {
-                            registerErrorBox.textContent = data.message || 'Error al procesar el registro.';
-                            registerErrorBox.style.display = 'block';
-                            registerErrorBox.classList.remove('shake-error');
-                            void registerErrorBox.offsetWidth;
-                            registerErrorBox.classList.add('shake-error');
-                        } else {
-                            alert(data.message || 'Error al procesar el registro.');
-                        }
-                    }, 400);
-                }
-            })
-            .catch(err => {
-                // Fallback en caso de error de red
-                registerForm.submit();
-            });
         });
     }
 

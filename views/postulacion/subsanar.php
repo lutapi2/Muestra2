@@ -1,6 +1,3 @@
-<?php
-use App\Helpers\FormatHelper;
-?>
 
 <div style="max-width: 900px; margin: 0 auto;">
     <div style="margin-bottom: 1.5rem;">
@@ -8,7 +5,7 @@ use App\Helpers\FormatHelper;
             &larr; Volver al Dashboard
         </a>
         <h1 style="color: #991b1b; font-size: 1.5rem; font-weight: 800; margin-top: 0.25rem; display: flex; align-items: center; gap: 0.5rem;">
-            <?= \App\Helpers\IconHelper::render('alert', 22) ?> Subsanación Requerida de Documentos
+            <?= IconHelper::render('alert', 22) ?> Subsanación Requerida de Documentos
         </h1>
         <p style="color: #64748b; font-size: 0.88rem;">
             Postulación: <strong><?= htmlspecialchars($postulacion['codigo_radicado'], ENT_QUOTES, 'UTF-8') ?></strong> &bull;
@@ -34,7 +31,7 @@ use App\Helpers\FormatHelper;
         <?php if (empty($itemsObservados)): ?>
             <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 10px; padding: 2.5rem; text-align: center;">
                 <p style="color: #10b981; font-weight: 700; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                    <?= \App\Helpers\IconHelper::render('check', 20) ?> Todos los requerimientos de subsanación han sido respondidos
+                    <?= IconHelper::render('check', 20) ?> Todos los requerimientos de subsanación han sido respondidos
                 </p>
                 <p style="color: #64748b; font-size: 0.88rem; margin-top: 0.5rem;">Su expediente ha vuelto a la bandeja de revisión de Talento Humano.</p>
                 <a href="<?= BASE_URL ?>/index.php?c=Dashboard&a=index" class="btn btn-primary" style="margin-top: 1rem;">Ir al Dashboard</a>
@@ -65,13 +62,13 @@ use App\Helpers\FormatHelper;
 
                         <div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
                             <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; font-weight: 700; color: #1e293b; margin-bottom: 0.35rem;">
-                                <?= \App\Helpers\IconHelper::render('paperclip', 14) ?> Adjuntar Nuevo Archivo Soporte Corregido (PDF, JPG, PNG)
+                                <?= IconHelper::render('paperclip', 14) ?> Adjuntar Nuevo Archivo Soporte Corregido (PDF, JPG, PNG)
                             </label>
                             <input type="file" name="nuevo_soporte" required accept=".pdf,.jpg,.jpeg,.png" class="filter-control" style="width: 100%; background: #ffffff;">
                         </div>
 
                         <button type="submit" class="btn btn-primary" style="font-weight: 700; display: inline-flex; align-items: center; gap: 0.4rem;">
-                            <?= \App\Helpers\IconHelper::render('upload', 14) ?> Enviar Corrección de este Ítem
+                            <?= IconHelper::render('upload', 14) ?> Enviar Corrección de este Ítem
                         </button>
                     </form>
                 </div>

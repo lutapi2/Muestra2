@@ -1,33 +1,31 @@
 <?php
-namespace App\Helpers;
-
 class FileHelper {
     public static function guardarArchivo(array $file): array {
         if (!isset($file['error']) || is_array($file['error'])) {
-            throw new \Exception('Parámetros de archivo inválidos.');
+            throw new Exception('Parámetros de archivo inválidos.');
         }
 
         switch ($file['error']) {
             case UPLOAD_ERR_OK:
                 break;
             case UPLOAD_ERR_NO_FILE:
-                throw new \Exception('No se seleccionó ningún archivo.');
+                throw new Exception('No se seleccionó ningún archivo.');
             case UPLOAD_ERR_INI_SIZE:
             case UPLOAD_ERR_FORM_SIZE:
-                throw new \Exception('El archivo excede el tamaño máximo permitido por el servidor.');
+                throw new Exception('El archivo excede el tamaño máximo permitido por el servidor.');
             default:
-                throw new \Exception('Error desconocido al subir el archivo.');
+                throw new Exception('Error desconocido al subir el archivo.');
         }
 
         if ($file['size'] > MAX_FILE_SIZE_BYTES) {
-            throw new \Exception('El archivo supera el tamaño máximo permitido de 10 MB.');
+            throw new Exception('El archivo supera el tamaño máximo permitido de 10 MB.');
         }
 
-        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
         $mime = $finfo->file($file['tmp_name']);
 
         if (!array_key_exists($mime, ALLOWED_MIME_TYPES)) {
-            throw new \Exception('Formato de archivo no permitido. Solo se aceptan PDF, JPG o PNG.');
+            throw new Exception('Formato de archivo no permitido. Solo se aceptan PDF, JPG o PNG.');
         }
 
         $extension = ALLOWED_MIME_TYPES[$mime];
@@ -39,7 +37,7 @@ class FileHelper {
         }
 
         if (!move_uploaded_file($file['tmp_name'], $destination)) {
-            throw new \Exception('Error al mover el archivo al almacenamiento seguro.');
+            throw new Exception('Error al mover el archivo al almacenamiento seguro.');
         }
 
         $hash = hash_file('sha256', $destination);

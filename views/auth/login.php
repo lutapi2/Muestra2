@@ -1,6 +1,3 @@
-<?php
-use App\Helpers\IconHelper;
-?>
 <div style="max-width: 460px; margin: 3rem auto; padding: 2.25rem; background: #0d211c; border: 1px solid #16362e; border-radius: 14px; width: 100%;">
     <div style="text-align: center; margin-bottom: 2rem;">
         <div style="width: 48px; height: 48px; background: #10b981; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; font-size: 1.5rem; margin-bottom: 0.75rem;">

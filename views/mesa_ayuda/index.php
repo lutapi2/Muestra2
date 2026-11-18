@@ -1,7 +1,3 @@
-<?php
-use App\Helpers\FormatHelper;
-use App\Helpers\AuthHelper;
-?>
 
 <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
     <div>
@@ -14,7 +10,7 @@ use App\Helpers\AuthHelper;
     </div>
 
     <button onclick="openModal('modalNuevoTicket')" class="btn btn-primary">
-        <?= \App\Helpers\IconHelper::render('plus', 16) ?> Crear Solicitud de Ayuda
+        <?= IconHelper::render('plus', 16) ?> Crear Solicitud de Ayuda
     </button>
 </div>
 
@@ -55,7 +51,7 @@ use App\Helpers\AuthHelper;
                         </td>
                         <td style="text-align: center;">
                             <button onclick="verTicket(<?= htmlspecialchars(json_encode($t), ENT_QUOTES, 'UTF-8') ?>)" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;">
-                                <?= \App\Helpers\IconHelper::render('eye', 14) ?> Ver Detalle
+                                <?= IconHelper::render('eye', 14) ?> Ver Detalle
                             </button>
                         </td>
                     </tr>

@@ -1,8 +1,3 @@
-<?php
-use App\Helpers\FormatHelper;
-use App\Helpers\AuthHelper;
-use App\Helpers\IconHelper;
-?>
 
 <div style="margin-bottom: 1.5rem;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">

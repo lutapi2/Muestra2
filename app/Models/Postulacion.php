@@ -1,8 +1,4 @@
 <?php
-namespace App\Models;
-
-use App\Core\Database;
-use PDO;
 
 class Postulacion {
     public static function findById(int $id): ?array {

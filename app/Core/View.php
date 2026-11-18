@@ -1,6 +1,4 @@
 <?php
-namespace App\Core;
-
 class View {
     private static array $sharedData = [];
 

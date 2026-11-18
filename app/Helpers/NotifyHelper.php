@@ -1,7 +1,4 @@
 <?php
-namespace App\Helpers;
-
-use App\Core\Database;
 
 class NotifyHelper {
     public static function enviar(int $usuarioId, string $asunto, string $mensaje, ?int $postulacionId = null, string $canal = 'portal'): void {
@@ -18,7 +15,7 @@ class NotifyHelper {
                 ':asunto' => $asunto,
                 ':mensaje' => $mensaje
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             error_log("Error notificación: " . $e->getMessage());
         }
     }
@@ -33,7 +30,7 @@ class NotifyHelper {
             ");
             $stmt->execute([':usuario_id' => $usuarioId]);
             return $stmt->fetchAll();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return [];
         }
     }

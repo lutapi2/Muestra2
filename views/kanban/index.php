@@ -1,6 +1,3 @@
-<?php
-use App\Helpers\FormatHelper;
-?>
 
 <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
     <div>
@@ -52,7 +49,7 @@ use App\Helpers\FormatHelper;
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <?= FormatHelper::badgeEstado($item['estado']) ?>
                                 <a href="<?= BASE_URL ?>/index.php?c=Kanban&a=lineaTiempo&id=<?= $item['id'] ?>" class="btn btn-secondary btn-sm" style="padding: 0.2rem 0.5rem; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 0.25rem;" title="Ver Línea de Tiempo">
-                                    <?= \App\Helpers\IconHelper::render('clock', 12) ?> Trazabilidad
+                                    <?= IconHelper::render('clock', 12) ?> Trazabilidad
                                 </a>
                             </div>
                         </div>

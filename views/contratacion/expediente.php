@@ -3,9 +3,6 @@
  * views/contratacion/expediente.php
  * Documentos para Aprobación y Expediente de Contratación (Imagen 3 - Limpio y Sin Emojis)
  */
-use App\Helpers\FormatHelper;
-use App\Helpers\AuthHelper;
-use App\Helpers\IconHelper;
 ?>
 
 <!-- Header -->
@@ -69,7 +66,12 @@ use App\Helpers\IconHelper;
             <?php foreach ($categorias as $catKey => $catData): ?>
                 <?php 
                     $totalCat = count($catData['items']);
-                    $aprobCat = count(array_filter($catData['items'], fn($i) => $i['estado'] === 'aprobado'));
+                    $aprobCat = 0;
+                    foreach ($catData['items'] as $itemCat) {
+                        if ($itemCat['estado'] === 'aprobado') {
+                            $aprobCat++;
+                        }
+                    }
                     $pillCount = $badgesCount[$catKey] ?? ($aprobCat . '/' . $totalCat);
                     $isBancaria = ($catKey === 'informacion_bancaria');
                 ?>

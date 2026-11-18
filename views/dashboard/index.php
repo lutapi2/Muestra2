@@ -3,9 +3,6 @@
  * views/dashboard/index.php
  * Dashboard Institucional CECAR (Imagen 1 Inferior - Estilo Limpio y Sin Emojis)
  */
-use App\Helpers\AuthHelper;
-use App\Helpers\FormatHelper;
-use App\Helpers\IconHelper;
 
 $usuario = AuthHelper::getUsuarioActual();
 ?>

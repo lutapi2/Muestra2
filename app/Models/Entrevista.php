@@ -1,8 +1,4 @@
 <?php
-namespace App\Models;
-
-use App\Core\Database;
-use PDO;
 
 class Entrevista {
     public static function listar(array $filtros = []): array {
@@ -52,7 +48,7 @@ class Entrevista {
             ':fin' => $datos['hora_fin']
         ]);
         if ((int)$conflictoStmt->fetchColumn() > 0) {
-            throw new \Exception('Conflicto de agenda: Ya existe una entrevista programada en esa misma fecha y rango de horario.');
+            throw new Exception('Conflicto de agenda: Ya existe una entrevista programada en esa misma fecha y rango de horario.');
         }
 
         $stmt = $pdo->prepare("

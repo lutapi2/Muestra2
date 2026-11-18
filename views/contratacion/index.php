@@ -3,8 +3,6 @@
  * views/contratacion/index.php
  * Gestión de Contratación de Seleccionados (Imagen 2 - Estilo Limpio y Sin Emojis)
  */
-use App\Helpers\FormatHelper;
-use App\Helpers\IconHelper;
 ?>
 
 <!-- Encabezado de Página (Imagen 2) -->

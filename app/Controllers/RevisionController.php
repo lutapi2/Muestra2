@@ -1,21 +1,10 @@
 <?php
-namespace App\Controllers;
-
-use App\Core\Request;
-use App\Core\Response;
-use App\Core\View;
-use App\Helpers\AuthHelper;
-use App\Helpers\AuditHelper;
-use App\Helpers\NotifyHelper;
-use App\Models\Postulacion;
-use App\Models\Convocatoria;
-use App\Models\ItemHV;
 
 class RevisionController {
     public function index(Request $request): void {
         AuthHelper::exigirRol(['admin', 'talento_humano', 'revisor']);
 
-        $pdo = \App\Core\Database::getConnection();
+        $pdo = Database::getConnection();
         $sql = "
             SELECT p.*, c.cargo, c.codigo as convocatoria_codigo, c.facultad,
                    u.nombres, u.apellidos, u.correo, u.numero_documento,
@@ -91,7 +80,7 @@ class RevisionController {
             Response::redirect('c=Revision&a=expediente&id=' . $postulacionId);
         }
 
-        $pdo = \App\Core\Database::getConnection();
+        $pdo = Database::getConnection();
 
         // Register revision
         $stmtRev = $pdo->prepare("
@@ -143,7 +132,7 @@ class RevisionController {
 
         $fechaLimite = date('Y-m-d 23:59:59', strtotime("+{$diasLimite} weekdays"));
 
-        $pdo = \App\Core\Database::getConnection();
+        $pdo = Database::getConnection();
 
         // Find all observed items
         $stmtObs = $pdo->prepare("SELECT id, titulo FROM items_hv WHERE postulacion_id = :id AND estado = 'observado'");

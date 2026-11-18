@@ -1,11 +1,4 @@
 <?php
-namespace App\Controllers;
-
-use App\Core\Request;
-use App\Core\Response;
-use App\Core\View;
-use App\Helpers\AuthHelper;
-use App\Models\Convocatoria;
 
 class ReportesController {
     public function index(Request $request): void {
@@ -16,7 +9,7 @@ class ReportesController {
         $facultad = $request->get('facultad', '');
         $periodo = $request->get('periodo', '');
 
-        $pdo = \App\Core\Database::getConnection();
+        $pdo = Database::getConnection();
 
         $params = [];
         $where = " WHERE 1=1 ";
@@ -115,7 +108,7 @@ class ReportesController {
         $out = fopen('php://output', 'w');
         fputs($out, "\xEF\xBB\xBF"); // BOM for Excel
 
-        $pdo = \App\Core\Database::getConnection();
+        $pdo = Database::getConnection();
 
         if ($tipo === 'no_aprobados') {
             fputcsv($out, ['Radicado', 'Aspirante', 'Documento', 'Correo', 'Cargo', 'Facultad', 'Etapa', 'Causal de Descarte', 'Motivo Detallado']);

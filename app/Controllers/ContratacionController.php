@@ -1,27 +1,6 @@
 <?php
-declare(strict_types=1);
-
-namespace App\Controllers;
-
-use App\Core\Request;
-use App\Core\Response;
-use App\Core\View;
-use App\Enums\EstadoFormalizacion;
-use App\Helpers\AuthHelper;
-use App\Helpers\AuditHelper;
-use App\Helpers\NotifyHelper;
-use App\Models\Contratacion;
-use App\Models\Convocatoria;
-use App\Models\Postulacion;
-use App\Services\ContratacionService;
 
 class ContratacionController {
-    private ContratacionService $service;
-
-    public function __construct() {
-        $this->service = new ContratacionService();
-    }
-
     public function index(Request $request): void {
         AuthHelper::exigirRol(['admin', 'talento_humano', 'revisor']);
 
@@ -35,7 +14,7 @@ class ContratacionController {
             'autorizados' => $request->get('autorizados', '')
         ];
 
-        $kpis = $this->service->getEstadisticasKPI();
+        $kpis = Contratacion::getKPIs();
         $seleccionados = Contratacion::listarSeleccionados($filtros);
         $convocatorias = Convocatoria::getAll();
 
@@ -64,7 +43,7 @@ class ContratacionController {
             'contratacion' => $expediente['contratacion'],
             'examen' => $expediente['examen'],
             'vinculacion' => $expediente['vinculacion'],
-            'kpis' => $this->service->getEstadisticasKPI()
+            'kpis' => Contratacion::getKPIs()
         ], 'main');
     }
 
@@ -75,10 +54,21 @@ class ContratacionController {
         $estadoRaw = $request->post('estado_formalizacion', 'firmado');
         $obs = trim($request->post('observaciones', ''));
 
-        $estadoEnum = EstadoFormalizacion::tryFrom($estadoRaw) ?? EstadoFormalizacion::EN_PROCESO;
-        $this->service->cambiarEstadoFormalizacion($postulacionId, $estadoEnum, $obs);
+        // Nombre que se muestra en el mensaje para cada estado de formalizacion
+        $nombres = [
+            'pendiente' => 'Pendiente',
+            'en_tramite' => 'En Trámite',
+            'firmado' => 'Firmado',
+            'rechazado' => 'Rechazado',
+            'formalizado' => 'Formalizado'
+        ];
+        if (!isset($nombres[$estadoRaw])) {
+            $estadoRaw = 'en_tramite';
+        }
 
-        AuthHelper::setFlash('success', "Estado de formalización actualizado a: " . $estadoEnum->label());
+        Contratacion::cambiarEstadoFormalizacion($postulacionId, $estadoRaw, $obs);
+
+        AuthHelper::setFlash('success', "Estado de formalización actualizado a: " . $nombres[$estadoRaw]);
         Response::redirect('c=Contratacion&a=expediente&id=' . $postulacionId);
     }
 
@@ -89,7 +79,7 @@ class ContratacionController {
         $fechaInicio = $request->post('fecha_inicio_labores', date('Y-m-d'));
 
         try {
-            $codigo = $this->service->vincularColaborador($postulacionId, $fechaInicio, (int)AuthHelper::getUsuarioId());
+            $codigo = Contratacion::vincularColaborador($postulacionId, $fechaInicio, (int)AuthHelper::getUsuarioId());
 
             $postulacion = Postulacion::findById($postulacionId);
             NotifyHelper::enviar(
@@ -100,7 +90,7 @@ class ContratacionController {
             );
 
             AuthHelper::setFlash('success', "Colaborador vinculado exitosamente. Código institucional: {$codigo}. Sincronización con Hoja de Vida institucional completada.");
-        } catch (\Throwable $e) {
+        } catch (Exception $e) {
             AuthHelper::setFlash('danger', 'Error al procesar vinculación: ' . $e->getMessage());
         }
 

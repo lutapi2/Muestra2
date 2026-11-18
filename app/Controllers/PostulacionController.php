@@ -1,16 +1,4 @@
 <?php
-namespace App\Controllers;
-
-use App\Core\Request;
-use App\Core\Response;
-use App\Core\View;
-use App\Helpers\AuthHelper;
-use App\Helpers\AuditHelper;
-use App\Helpers\FileHelper;
-use App\Helpers\NotifyHelper;
-use App\Models\Postulacion;
-use App\Models\Convocatoria;
-use App\Models\ItemHV;
 
 class PostulacionController {
     public function index(Request $request): void {
@@ -57,7 +45,7 @@ class PostulacionController {
         if (!empty($_FILES['archivo']) && $_FILES['archivo']['error'] !== UPLOAD_ERR_NO_FILE) {
             try {
                 $archivoSubido = FileHelper::guardarArchivo($_FILES['archivo']);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 AuthHelper::setFlash('danger', 'Error al cargar soporte: ' . $e->getMessage());
                 Response::redirect('c=Postulacion&a=index&convocatoria_id=' . $request->post('convocatoria_id'));
             }
@@ -78,7 +66,7 @@ class PostulacionController {
             AuditHelper::log('agregar_item_hv', 'items_hv', $postulacionId, null, ['titulo' => $titulo, 'categoria' => $categoria]);
 
             AuthHelper::setFlash('success', "Ítem y soporte guardados correctamente en la categoría '{$categoria}'.");
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             AuthHelper::setFlash('danger', 'Error al registrar ítem: ' . $e->getMessage());
         }
 
@@ -107,7 +95,7 @@ class PostulacionController {
         Postulacion::enviar($postulacionId, $declaracionVeracidad, $bancoTalento);
 
         // Update all items to 'enviado'
-        $pdo = \App\Core\Database::getConnection();
+        $pdo = Database::getConnection();
         $pdo->prepare("UPDATE items_hv SET estado = 'enviado' WHERE postulacion_id = :id AND estado = 'borrador'")
             ->execute([':id' => $postulacionId]);
 
@@ -160,7 +148,7 @@ class PostulacionController {
             Response::redirect('c=Dashboard&a=index');
         }
 
-        $pdo = \App\Core\Database::getConnection();
+        $pdo = Database::getConnection();
         $stmt = $pdo->prepare("
             SELECT s.*, u.nombres as solicitante_nombres, u.apellidos as solicitante_apellidos
             FROM solicitudes_subsanacion s
@@ -200,7 +188,7 @@ class PostulacionController {
         if (!empty($_FILES['nuevo_soporte']) && $_FILES['nuevo_soporte']['error'] !== UPLOAD_ERR_NO_FILE) {
             try {
                 $archivoSubido = FileHelper::guardarArchivo($_FILES['nuevo_soporte']);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 AuthHelper::setFlash('danger', 'Error al cargar soporte de subsanación: ' . $e->getMessage());
                 Response::redirect('c=Postulacion&a=subsanar&id=' . $postulacionId);
             }
@@ -213,7 +201,7 @@ class PostulacionController {
         ], $archivoSubido);
 
         // Mark detalle subsanacion as subsanado
-        $pdo = \App\Core\Database::getConnection();
+        $pdo = Database::getConnection();
         $pdo->prepare("UPDATE detalles_subsanacion SET subsanado = 1 WHERE item_hv_id = :id")->execute([':id' => $itemId]);
 
         // If no more items to subsanar, update postulacion back to 'en_revision'

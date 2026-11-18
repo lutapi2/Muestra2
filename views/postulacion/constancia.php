@@ -1,6 +1,3 @@
-<?php
-use App\Helpers\FormatHelper;
-?>
 
 <div style="max-width: 800px; margin: 1.5rem auto; background: #ffffff; border: 1px solid var(--border-color); border-radius: 10px; padding: 2.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0b6b44; padding-bottom: 1.25rem; margin-bottom: 1.5rem;">
@@ -44,7 +41,7 @@ use App\Helpers\FormatHelper;
         <ul style="list-style: none; font-size: 0.85rem; color: #475569; display: flex; flex-direction: column; gap: 0.4rem;">
             <?php foreach ($items as $item): ?>
                 <li style="display: flex; justify-content: space-between; padding: 0.35rem 0.5rem; background: #fdfdfd; border-radius: 4px; align-items: center;">
-                    <span style="display: inline-flex; align-items: center; gap: 0.4rem; color: #10b981;"><?= \App\Helpers\IconHelper::render('check', 14) ?> <span style="color: #334155;"><?= htmlspecialchars($item['titulo'], ENT_QUOTES, 'UTF-8') ?></span></span>
+                    <span style="display: inline-flex; align-items: center; gap: 0.4rem; color: #10b981;"><?= IconHelper::render('check', 14) ?> <span style="color: #334155;"><?= htmlspecialchars($item['titulo'], ENT_QUOTES, 'UTF-8') ?></span></span>
                     <span style="color: #64748b; font-size: 0.78rem;"><?= htmlspecialchars($item['nombre_original'] ?? 'Sin archivo adjunto', ENT_QUOTES, 'UTF-8') ?></span>
                 </li>
             <?php endforeach; ?>
@@ -57,7 +54,7 @@ use App\Helpers\FormatHelper;
 
     <div style="display: flex; justify-content: center; gap: 1rem;">
         <button onclick="window.print()" class="btn btn-primary" style="padding: 0.6rem 1.5rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.4rem;">
-            <?= \App\Helpers\IconHelper::render('document', 16) ?> Imprimir Constancia / Guardar PDF
+            <?= IconHelper::render('document', 16) ?> Imprimir Constancia / Guardar PDF
         </button>
         <a href="<?= BASE_URL ?>/index.php?c=Dashboard&a=index" class="btn btn-secondary" style="padding: 0.6rem 1.5rem;">
             Volver al Dashboard

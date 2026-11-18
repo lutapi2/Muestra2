@@ -1,6 +1,3 @@
-<?php
-use App\Helpers\FormatHelper;
-?>
 
 <div style="margin-bottom: 1.5rem;">
     <h1 style="color: #0b6b44; font-size: 1.5rem; font-weight: 800;">

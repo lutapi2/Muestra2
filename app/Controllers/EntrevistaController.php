@@ -1,16 +1,4 @@
 <?php
-namespace App\Controllers;
-
-use App\Core\Request;
-use App\Core\Response;
-use App\Core\View;
-use App\Helpers\AuthHelper;
-use App\Helpers\AuditHelper;
-use App\Helpers\NotifyHelper;
-use App\Models\Entrevista;
-use App\Models\Convocatoria;
-use App\Models\Postulacion;
-use App\Models\Usuario;
 
 class EntrevistaController {
     public function index(Request $request): void {
@@ -20,7 +8,7 @@ class EntrevistaController {
         $convocatorias = Convocatoria::getAll();
 
         // Get preselected candidates ready for interview
-        $pdo = \App\Core\Database::getConnection();
+        $pdo = Database::getConnection();
         $stmtPre = $pdo->query("
             SELECT p.*, u.nombres, u.apellidos, u.numero_documento, c.cargo
             FROM postulaciones p
@@ -76,7 +64,7 @@ class EntrevistaController {
             );
 
             AuthHelper::setFlash('success', '¡Entrevista agendada exitosamente sin conflictos de horario!');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             AuthHelper::setFlash('danger', 'Error al programar: ' . $e->getMessage());
         }
 

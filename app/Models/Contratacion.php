@@ -1,8 +1,4 @@
 <?php
-namespace App\Models;
-
-use App\Core\Database;
-use PDO;
 
 class Contratacion {
     public static function getKPIs(): array {
@@ -233,7 +229,7 @@ class Contratacion {
 
             $pdo->commit();
             return $codigoColaborador;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $pdo->rollBack();
             throw $e;
         }

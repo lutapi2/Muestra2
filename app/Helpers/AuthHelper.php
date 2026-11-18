@@ -1,7 +1,4 @@
 <?php
-namespace App\Helpers;
-
-use App\Core\Response;
 
 class AuthHelper {
     public static function initSession(): void {

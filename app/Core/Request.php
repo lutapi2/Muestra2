@@ -1,6 +1,4 @@
 <?php
-namespace App\Core;
-
 class Request {
     private array $get;
     private array $post;

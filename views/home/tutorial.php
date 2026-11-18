@@ -1,7 +1,3 @@
-<?php
-use App\Helpers\IconHelper;
-use App\Helpers\AuthHelper;
-?>
 <div style="max-width: 1000px; margin: 2rem auto; padding: 2rem; background: #ffffff; border: 1px solid var(--border-color); border-radius: 14px;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; border-bottom: 2px solid #f1f5f9; padding-bottom: 1.5rem;">
         <div>

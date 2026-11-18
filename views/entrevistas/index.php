@@ -1,7 +1,3 @@
-<?php
-use App\Helpers\FormatHelper;
-use App\Helpers\AuthHelper;
-?>
 
 <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
     <div>
@@ -15,7 +11,7 @@ use App\Helpers\AuthHelper;
 
     <?php if (AuthHelper::esTalentoHumano()): ?>
         <button onclick="openModal('modalProgramarEntrevista')" class="btn btn-primary">
-            <?= \App\Helpers\IconHelper::render('plus', 16) ?> Programar Nueva Entrevista
+            <?= IconHelper::render('plus', 16) ?> Programar Nueva Entrevista
         </button>
     <?php endif; ?>
 </div>
@@ -57,7 +53,7 @@ use App\Helpers\AuthHelper;
                         <td>
                             <?php if ($e['modalidad'] === 'virtual' && !empty($e['enlace'])): ?>
                                 <a href="<?= htmlspecialchars($e['enlace'], ENT_QUOTES, 'UTF-8') ?>" target="_blank" class="btn btn-secondary btn-sm" style="color: #0284c7; display: inline-flex; align-items: center; gap: 0.35rem;">
-                                    <?= \App\Helpers\IconHelper::render('external', 14) ?> Unirse a Reunión
+                                    <?= IconHelper::render('external', 14) ?> Unirse a Reunión
                                 </a>
                             <?php else: ?>
                                 <span style="font-size: 0.82rem; color: #475569;"><?= htmlspecialchars($e['ubicacion'], ENT_QUOTES, 'UTF-8') ?></span>
@@ -67,11 +63,11 @@ use App\Helpers\AuthHelper;
                         <td style="text-align: center;">
                             <?php if ($e['estado'] !== 'realizada'): ?>
                                 <button onclick="abrirModalCalificarEntrevista(<?= $e['id'] ?>, '<?= htmlspecialchars($e['nombres'] . ' ' . $e['apellidos'], ENT_QUOTES, 'UTF-8') ?>')" class="btn btn-primary btn-sm" style="display: inline-flex; align-items: center; gap: 0.35rem;">
-                                    <?= \App\Helpers\IconHelper::render('award', 14) ?> Calificar
+                                    <?= IconHelper::render('award', 14) ?> Calificar
                                 </button>
                             <?php else: ?>
                                 <span style="color: #10b981; font-weight: 700; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 0.35rem;">
-                                    <?= \App\Helpers\IconHelper::render('check', 14) ?> Evaluada
+                                    <?= IconHelper::render('check', 14) ?> Evaluada
                                 </span>
                             <?php endif; ?>
                         </td>

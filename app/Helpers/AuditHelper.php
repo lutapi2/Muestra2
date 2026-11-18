@@ -1,7 +1,4 @@
 <?php
-namespace App\Helpers;
-
-use App\Core\Database;
 
 class AuditHelper {
     public static function log(string $accion, string $entidad, $entidadId, $datosAntes = null, $datosDespues = null): void {
@@ -21,7 +18,7 @@ class AuditHelper {
                 ':ip' => $_SERVER['REMOTE_ADDR'] ?? '127.0.0.1',
                 ':user_agent' => substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255)
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Fail silently without stopping business flow
             error_log("Error auditoria: " . $e->getMessage());
         }
@@ -43,7 +40,7 @@ class AuditHelper {
                 ':detalle' => $detalle,
                 ':es_interno' => $esInterno ? 1 : 0
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             error_log("Error movimiento: " . $e->getMessage());
         }
     }

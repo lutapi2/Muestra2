@@ -2,6 +2,7 @@
 -- PLATAFORMA DE CONTRATACIÓN Y SELECCIÓN DE PERSONAL - CECAR
 -- Esquema Relacional de Base de Datos (SQLite / MySQL Compatible)
 -- Cumple con RF-001 a RF-106, RNF-001 a RNF-030 y Reglas RN-001 a RN-028
+-- Integridad referencial con soporte completo de eliminación en cascada (Hard Delete)
 -- ============================================================================
 
 CREATE TABLE IF NOT EXISTS dependencias (
@@ -36,8 +37,8 @@ CREATE TABLE IF NOT EXISTS usuarios (
     activo INTEGER NOT NULL DEFAULT 1,
     ultimo_acceso DATETIME,
     fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (rol) REFERENCES roles(id),
-    FOREIGN KEY (dependencia_id) REFERENCES dependencias(id)
+    FOREIGN KEY (rol) REFERENCES roles(id) ON DELETE RESTRICT,
+    FOREIGN KEY (dependencia_id) REFERENCES dependencias(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS consentimientos (
@@ -47,7 +48,7 @@ CREATE TABLE IF NOT EXISTS consentimientos (
     version_texto VARCHAR(20) NOT NULL DEFAULT 'v3.0-2026',
     ip_origen VARCHAR(50),
     fecha_hora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS convocatorias (
@@ -69,8 +70,8 @@ CREATE TABLE IF NOT EXISTS convocatorias (
     motivo_retiro TEXT,
     creado_por INTEGER,
     fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (dependencia_id) REFERENCES dependencias(id),
-    FOREIGN KEY (creado_por) REFERENCES usuarios(id)
+    FOREIGN KEY (dependencia_id) REFERENCES dependencias(id) ON DELETE RESTRICT,
+    FOREIGN KEY (creado_por) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS perfil_cargo (
@@ -127,8 +128,8 @@ CREATE TABLE IF NOT EXISTS postulaciones (
     etapa_actual VARCHAR(50) NOT NULL DEFAULT 'revision_documental',
     banco_talento_consentimiento INTEGER NOT NULL DEFAULT 0,
     notas_internas TEXT,
-    FOREIGN KEY (convocatoria_id) REFERENCES convocatorias(id),
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+    FOREIGN KEY (convocatoria_id) REFERENCES convocatorias(id) ON DELETE CASCADE,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
     UNIQUE (convocatoria_id, usuario_id)
 );
 
@@ -166,25 +167,25 @@ CREATE TABLE IF NOT EXISTS soportes (
 CREATE TABLE IF NOT EXISTS revisiones_item (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     item_hv_id INTEGER NOT NULL,
-    revisor_id INTEGER NOT NULL,
+    revisor_id INTEGER,
     resultado VARCHAR(30) NOT NULL, -- aprobado, observado, rechazado
     motivo VARCHAR(200),
     observacion TEXT,
     fecha_revision DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (item_hv_id) REFERENCES items_hv(id) ON DELETE CASCADE,
-    FOREIGN KEY (revisor_id) REFERENCES usuarios(id)
+    FOREIGN KEY (revisor_id) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS solicitudes_subsanacion (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     postulacion_id INTEGER NOT NULL,
-    solicitante_id INTEGER NOT NULL,
+    solicitante_id INTEGER,
     fecha_solicitud DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     fecha_limite DATETIME NOT NULL,
     estado VARCHAR(30) NOT NULL DEFAULT 'pendiente', -- pendiente, respondida, vencida
     observaciones TEXT,
     FOREIGN KEY (postulacion_id) REFERENCES postulaciones(id) ON DELETE CASCADE,
-    FOREIGN KEY (solicitante_id) REFERENCES usuarios(id)
+    FOREIGN KEY (solicitante_id) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS detalles_subsanacion (
@@ -194,36 +195,36 @@ CREATE TABLE IF NOT EXISTS detalles_subsanacion (
     motivo_observacion TEXT NOT NULL,
     subsanado INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (solicitud_id) REFERENCES solicitudes_subsanacion(id) ON DELETE CASCADE,
-    FOREIGN KEY (item_hv_id) REFERENCES items_hv(id)
+    FOREIGN KEY (item_hv_id) REFERENCES items_hv(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS evaluaciones (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     postulacion_id INTEGER NOT NULL,
     criterio_id INTEGER NOT NULL,
-    evaluador_id INTEGER NOT NULL,
+    evaluador_id INTEGER,
     puntaje REAL NOT NULL,
     resultado VARCHAR(30) NOT NULL, -- cumple, no_cumple, sobresaliente
     observacion TEXT,
     fecha_evaluacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (postulacion_id) REFERENCES postulaciones(id) ON DELETE CASCADE,
-    FOREIGN KEY (criterio_id) REFERENCES criterios_evaluacion(id),
-    FOREIGN KEY (evaluador_id) REFERENCES usuarios(id)
+    FOREIGN KEY (criterio_id) REFERENCES criterios_evaluacion(id) ON DELETE CASCADE,
+    FOREIGN KEY (evaluador_id) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS pruebas (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     postulacion_id INTEGER NOT NULL,
     tipo VARCHAR(50) NOT NULL, -- psicotecnica, conocimiento, aula_docente
-    responsable_id INTEGER NOT NULL,
+    responsable_id INTEGER,
     calificacion REAL,
     dictamen VARCHAR(30) NOT NULL, -- aprobado, no_aprobado
     observaciones TEXT,
     soporte_id INTEGER,
     fecha_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (postulacion_id) REFERENCES postulaciones(id) ON DELETE CASCADE,
-    FOREIGN KEY (responsable_id) REFERENCES usuarios(id),
-    FOREIGN KEY (soporte_id) REFERENCES soportes(id)
+    FOREIGN KEY (responsable_id) REFERENCES usuarios(id) ON DELETE SET NULL,
+    FOREIGN KEY (soporte_id) REFERENCES soportes(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS franjas_entrevista (
@@ -247,14 +248,14 @@ CREATE TABLE IF NOT EXISTS entrevistas (
     fecha DATE NOT NULL,
     hora_inicio TIME NOT NULL,
     hora_fin TIME NOT NULL,
-    modalidad VARCHAR(30) NOT NULL DEFAULT 'virtual',
+    modalidad VARCHAR(30) NOT NULL DEFAULT 'virtual', -- presencial, virtual
     ubicacion VARCHAR(200),
     enlace VARCHAR(255),
     estado VARCHAR(30) NOT NULL DEFAULT 'programada', -- programada, confirmada, realizada, reprogramada, cancelada
     motivo_cambio TEXT,
     fecha_programacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (postulacion_id) REFERENCES postulaciones(id) ON DELETE CASCADE,
-    FOREIGN KEY (franja_id) REFERENCES franjas_entrevista(id)
+    FOREIGN KEY (franja_id) REFERENCES franjas_entrevista(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS entrevistadores (
@@ -263,21 +264,21 @@ CREATE TABLE IF NOT EXISTS entrevistadores (
     usuario_id INTEGER NOT NULL,
     rol_comite VARCHAR(50) NOT NULL DEFAULT 'evaluador',
     FOREIGN KEY (entrevista_id) REFERENCES entrevistas(id) ON DELETE CASCADE,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
     UNIQUE (entrevista_id, usuario_id)
 );
 
 CREATE TABLE IF NOT EXISTS resultados_entrevista (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     entrevista_id INTEGER NOT NULL,
-    evaluador_id INTEGER NOT NULL,
+    evaluador_id INTEGER,
     puntaje REAL NOT NULL,
     concepto VARCHAR(50) NOT NULL, -- favorable, desfavorable, condicionado
     observacion TEXT,
     tipo VARCHAR(20) NOT NULL DEFAULT 'individual', -- individual, consolidado
     fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (entrevista_id) REFERENCES entrevistas(id) ON DELETE CASCADE,
-    FOREIGN KEY (evaluador_id) REFERENCES usuarios(id)
+    FOREIGN KEY (evaluador_id) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS decisiones_finales (
@@ -285,10 +286,10 @@ CREATE TABLE IF NOT EXISTS decisiones_finales (
     postulacion_id INTEGER NOT NULL UNIQUE,
     resultado VARCHAR(30) NOT NULL, -- seleccionado, no_seleccionado, elegible
     fundamento TEXT NOT NULL,
-    usuario_id INTEGER NOT NULL,
+    usuario_id INTEGER,
     fecha_publicacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (postulacion_id) REFERENCES postulaciones(id) ON DELETE CASCADE,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS examenes_ocupacionales (
@@ -302,8 +303,8 @@ CREATE TABLE IF NOT EXISTS examenes_ocupacionales (
     registrado_por INTEGER,
     fecha_registro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (postulacion_id) REFERENCES postulaciones(id) ON DELETE CASCADE,
-    FOREIGN KEY (soporte_id) REFERENCES soportes(id),
-    FOREIGN KEY (registrado_por) REFERENCES usuarios(id)
+    FOREIGN KEY (soporte_id) REFERENCES soportes(id) ON DELETE SET NULL,
+    FOREIGN KEY (registrado_por) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS contrataciones (
@@ -319,8 +320,8 @@ CREATE TABLE IF NOT EXISTS contrataciones (
     soporte_contrato_id INTEGER,
     fecha_actualizacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (postulacion_id) REFERENCES postulaciones(id) ON DELETE CASCADE,
-    FOREIGN KEY (responsable_id) REFERENCES usuarios(id),
-    FOREIGN KEY (soporte_contrato_id) REFERENCES soportes(id)
+    FOREIGN KEY (responsable_id) REFERENCES usuarios(id) ON DELETE SET NULL,
+    FOREIGN KEY (soporte_contrato_id) REFERENCES soportes(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS vinculaciones (
@@ -330,11 +331,11 @@ CREATE TABLE IF NOT EXISTS vinculaciones (
     codigo_colaborador VARCHAR(50) NOT NULL UNIQUE,
     fecha_vinculacion DATE NOT NULL,
     estado VARCHAR(30) NOT NULL DEFAULT 'vinculado', -- vinculado, anulado
-    confirmado_por INTEGER NOT NULL,
+    confirmado_por INTEGER,
     fecha_confirmacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (contratacion_id) REFERENCES contrataciones(id),
-    FOREIGN KEY (postulacion_id) REFERENCES postulaciones(id),
-    FOREIGN KEY (confirmado_por) REFERENCES usuarios(id)
+    FOREIGN KEY (contratacion_id) REFERENCES contrataciones(id) ON DELETE CASCADE,
+    FOREIGN KEY (postulacion_id) REFERENCES postulaciones(id) ON DELETE CASCADE,
+    FOREIGN KEY (confirmado_por) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS integraciones_hv (
@@ -346,31 +347,31 @@ CREATE TABLE IF NOT EXISTS integraciones_hv (
     payload_transferido TEXT,
     fecha_transferencia DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     reintentos INTEGER NOT NULL DEFAULT 0,
-    FOREIGN KEY (postulacion_id) REFERENCES postulaciones(id)
+    FOREIGN KEY (postulacion_id) REFERENCES postulaciones(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS planes_trabajo (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     convocatoria_id INTEGER NOT NULL,
     titulo VARCHAR(150) NOT NULL,
-    responsable_id INTEGER NOT NULL,
+    responsable_id INTEGER,
     estado VARCHAR(30) NOT NULL DEFAULT 'en_curso', -- planificado, en_curso, completado
     fecha_inicio DATE NOT NULL,
     fecha_fin DATE NOT NULL,
     FOREIGN KEY (convocatoria_id) REFERENCES convocatorias(id) ON DELETE CASCADE,
-    FOREIGN KEY (responsable_id) REFERENCES usuarios(id)
+    FOREIGN KEY (responsable_id) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS actividades_plan (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     plan_id INTEGER NOT NULL,
     actividad VARCHAR(200) NOT NULL,
-    responsable_id INTEGER NOT NULL,
+    responsable_id INTEGER,
     fecha_limite DATE NOT NULL,
     estado VARCHAR(30) NOT NULL DEFAULT 'pendiente', -- pendiente, en_progreso, completada
     observaciones TEXT,
     FOREIGN KEY (plan_id) REFERENCES planes_trabajo(id) ON DELETE CASCADE,
-    FOREIGN KEY (responsable_id) REFERENCES usuarios(id)
+    FOREIGN KEY (responsable_id) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS tickets_ayuda (
@@ -384,8 +385,8 @@ CREATE TABLE IF NOT EXISTS tickets_ayuda (
     respondido_por INTEGER,
     fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     fecha_respuesta DATETIME,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
-    FOREIGN KEY (respondido_por) REFERENCES usuarios(id)
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (respondido_por) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS notificaciones (
@@ -397,14 +398,14 @@ CREATE TABLE IF NOT EXISTS notificaciones (
     mensaje TEXT NOT NULL,
     leida INTEGER NOT NULL DEFAULT 0,
     fecha_envio DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id),
-    FOREIGN KEY (postulacion_id) REFERENCES postulaciones(id)
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (postulacion_id) REFERENCES postulaciones(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS movimientos_historial (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     postulacion_id INTEGER NOT NULL,
-    usuario_id INTEGER NOT NULL,
+    usuario_id INTEGER,
     accion VARCHAR(100) NOT NULL,
     estado_anterior VARCHAR(50),
     estado_nuevo VARCHAR(50),
@@ -412,7 +413,7 @@ CREATE TABLE IF NOT EXISTS movimientos_historial (
     es_interno INTEGER NOT NULL DEFAULT 0,
     fecha_hora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (postulacion_id) REFERENCES postulaciones(id) ON DELETE CASCADE,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS auditoria (
@@ -425,7 +426,8 @@ CREATE TABLE IF NOT EXISTS auditoria (
     datos_despues TEXT,
     ip VARCHAR(50),
     user_agent VARCHAR(255),
-    fecha_hora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    fecha_hora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS catalogos (

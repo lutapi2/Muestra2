@@ -1,10 +1,4 @@
 <?php
-namespace App\Controllers;
-
-use App\Core\Request;
-use App\Core\Response;
-use App\Helpers\AuthHelper;
-use App\Helpers\FileHelper;
 
 class DescargaController {
     public function ver(Request $request): void {
@@ -12,7 +6,7 @@ class DescargaController {
 
         $soporteId = (int)$request->get('id');
 
-        $pdo = \App\Core\Database::getConnection();
+        $pdo = Database::getConnection();
         $stmt = $pdo->prepare("
             SELECT s.*, p.usuario_id
             FROM soportes s

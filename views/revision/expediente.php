@@ -1,7 +1,3 @@
-<?php
-use App\Helpers\FormatHelper;
-use App\Helpers\AuthHelper;
-?>
 
 <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
     <div>

@@ -1,14 +1,4 @@
 <?php
-namespace App\Controllers;
-
-use App\Core\Request;
-use App\Core\Response;
-use App\Core\View;
-use App\Helpers\AuthHelper;
-use App\Helpers\AuditHelper;
-use App\Helpers\NotifyHelper;
-use App\Models\Postulacion;
-use App\Models\Convocatoria;
 
 class EvaluacionController {
     public function matriz(Request $request): void {
@@ -17,7 +7,7 @@ class EvaluacionController {
         $convocatoriaId = (int)$request->get('convocatoria_id', 1);
         $convocatorias = Convocatoria::getAll();
 
-        $pdo = \App\Core\Database::getConnection();
+        $pdo = Database::getConnection();
         $stmtCriterios = $pdo->prepare("SELECT * FROM criterios_evaluacion WHERE convocatoria_id = :cid ORDER BY etapa, id ASC");
         $stmtCriterios->execute([':cid' => $convocatoriaId]);
         $criterios = $stmtCriterios->fetchAll();
@@ -56,7 +46,7 @@ class EvaluacionController {
         $dictamen = $request->post('dictamen', 'aprobado');
         $observaciones = trim($request->post('observaciones', ''));
 
-        $pdo = \App\Core\Database::getConnection();
+        $pdo = Database::getConnection();
         $stmt = $pdo->prepare("
             INSERT INTO pruebas (postulacion_id, tipo, responsable_id, calificacion, dictamen, observaciones, fecha_registro)
             VALUES (:pid, :tipo, :rid, :calif, :dictamen, :obs, CURRENT_TIMESTAMP)
@@ -84,7 +74,7 @@ class EvaluacionController {
         $causalId = $request->post('causal_descarte_id', null);
 
         $postulacion = Postulacion::findById($postulacionId);
-        $pdo = \App\Core\Database::getConnection();
+        $pdo = Database::getConnection();
 
         if ($decision === 'preseleccionar') {
             Postulacion::actualizarEstado($postulacionId, 'preseleccionada', 'entrevista');

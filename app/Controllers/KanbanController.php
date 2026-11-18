@@ -1,10 +1,4 @@
 <?php
-namespace App\Controllers;
-
-use App\Core\Request;
-use App\Core\View;
-use App\Helpers\AuthHelper;
-use App\Models\Convocatoria;
 
 class KanbanController {
     public function index(Request $request): void {
@@ -13,7 +7,7 @@ class KanbanController {
         $convocatoriaId = (int)$request->get('convocatoria_id', 1);
         $convocatorias = Convocatoria::getAll();
 
-        $pdo = \App\Core\Database::getConnection();
+        $pdo = Database::getConnection();
 
         $stmt = $pdo->prepare("
             SELECT p.*, u.nombres, u.apellidos, u.numero_documento, u.correo, c.cargo, c.facultad
@@ -64,7 +58,7 @@ class KanbanController {
         AuthHelper::exigirRol(['admin', 'talento_humano', 'revisor', 'entrevistador']);
 
         $postulacionId = (int)$request->get('id');
-        $pdo = \App\Core\Database::getConnection();
+        $pdo = Database::getConnection();
 
         $stmtPost = $pdo->prepare("
             SELECT p.*, u.nombres, u.apellidos, u.numero_documento, c.cargo, c.facultad
@@ -78,7 +72,7 @@ class KanbanController {
 
         if (!$postulacion) {
             AuthHelper::setFlash('danger', 'Postulación no encontrada.');
-            \App\Core\Response::redirect('c=Kanban&a=index');
+            Response::redirect('c=Kanban&a=index');
         }
 
         $stmtMov = $pdo->prepare("

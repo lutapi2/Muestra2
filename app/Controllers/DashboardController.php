@@ -1,11 +1,4 @@
 <?php
-namespace App\Controllers;
-
-use App\Core\Request;
-use App\Core\View;
-use App\Helpers\AuthHelper;
-use App\Models\Postulacion;
-use App\Models\Convocatoria;
 
 class DashboardController {
     public function index(Request $request): void {
@@ -17,7 +10,7 @@ class DashboardController {
 
         $misPostulaciones = [];
         if ($esCandidato) {
-            $pdo = \App\Core\Database::getConnection();
+            $pdo = Database::getConnection();
             $stmt = $pdo->prepare("
                 SELECT p.*, c.cargo, c.codigo as convocatoria_codigo, c.facultad, c.fecha_cierre
                 FROM postulaciones p

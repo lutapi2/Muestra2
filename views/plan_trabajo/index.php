@@ -1,6 +1,3 @@
-<?php
-use App\Helpers\FormatHelper;
-?>
 
 <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
     <div>

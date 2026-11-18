@@ -1,16 +1,11 @@
-<?php
-use App\Helpers\FormatHelper;
-use App\Helpers\AuthHelper;
-?>
-
 <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
     <div>
         <h1 style="color: #0b6b44; font-size: 1.5rem; font-weight: 800;">Convocatorias Públicas Institucionales</h1>
         <p style="color: #64748b; font-size: 0.88rem;">Consulte las convocatorias de méritos vigentes para vinculación docente y administrativa en CECAR.</p>
     </div>
     <?php if ($esGestor): ?>
-        <a href="<?= BASE_URL ?>/index.php?c=Convocatoria&a=crear" class="btn btn-primary">
-            <?= \App\Helpers\IconHelper::render('plus', 16) ?> Crear Convocatoria
+        <a href="<?= BASE_URL ?>/index.php?c=Convocatoria&a=crear" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+            <?= IconHelper::render('plus', 16) ?> Crear Convocatoria
         </a>
     <?php endif; ?>
 </div>
@@ -22,6 +17,16 @@ use App\Helpers\AuthHelper;
     <input type="text" name="buscar" value="<?= htmlspecialchars($filtros['buscar'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="filter-control" style="flex: 2; min-width: 200px;" placeholder="Buscar por cargo o código...">
 
     <input type="text" name="facultad" value="<?= htmlspecialchars($filtros['facultad'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="filter-control" style="flex: 1.5; min-width: 180px;" placeholder="Facultad o Dependencia...">
+
+    <?php if ($esGestor): ?>
+        <select name="estado" class="filter-control" style="flex: 1; min-width: 140px;">
+            <option value="">Todos los Estados</option>
+            <option value="publicada" <?= ($filtros['estado'] === 'publicada') ? 'selected' : '' ?>>Publicada</option>
+            <option value="borrador" <?= ($filtros['estado'] === 'borrador') ? 'selected' : '' ?>>Borrador</option>
+            <option value="cerrada" <?= ($filtros['estado'] === 'cerrada') ? 'selected' : '' ?>>Cerrada</option>
+            <option value="retirada" <?= ($filtros['estado'] === 'retirada') ? 'selected' : '' ?>>Retirada</option>
+        </select>
+    <?php endif; ?>
 
     <button type="submit" class="btn btn-secondary">Buscar</button>
     <a href="<?= BASE_URL ?>/index.php?c=Convocatoria&a=index" class="btn btn-secondary">Limpiar</a>
@@ -51,20 +56,43 @@ use App\Helpers\AuthHelper;
                         <strong>Facultad:</strong> <?= htmlspecialchars($c['facultad'], ENT_QUOTES, 'UTF-8') ?><br>
                         <strong>Modalidad:</strong> <?= htmlspecialchars($c['modalidad'], ENT_QUOTES, 'UTF-8') ?> &bull; 
                         <strong>Vacantes:</strong> <?= (int)$c['vacantes'] ?>
+                        <?php if (isset($c['total_postulados'])): ?>
+                            &bull; <strong>Postulados:</strong> <?= (int)$c['total_postulados'] ?>
+                        <?php endif; ?>
                     </p>
 
                     <div style="background: #f8fafc; border-radius: 6px; padding: 0.65rem 0.85rem; font-size: 0.8rem; color: #475569; margin-bottom: 1.25rem;">
-                        <span style="display: inline-flex; align-items: center; gap: 0.4rem;"><?= \App\Helpers\IconHelper::render('calendar', 14) ?> <strong>Cierre de postulación:</strong> <?= FormatHelper::fecha($c['fecha_cierre']) ?></span>
+                        <span style="display: inline-flex; align-items: center; gap: 0.4rem;">
+                            <?= IconHelper::render('calendar', 14) ?> 
+                            <strong>Cierre de postulación:</strong> <?= FormatHelper::fecha($c['fecha_cierre']) ?>
+                        </span>
                     </div>
                 </div>
 
-                <div style="display: flex; gap: 0.5rem; justify-content: space-between; align-items: center; pt-2;">
-                    <a href="<?= BASE_URL ?>/index.php?c=Convocatoria&a=detalle&id=<?= $c['id'] ?>" class="btn btn-secondary btn-sm" style="flex: 1; text-align: center;">
-                        Ver Requisitos
-                    </a>
-                    <a href="<?= BASE_URL ?>/index.php?c=Postulacion&a=index&convocatoria_id=<?= $c['id'] ?>" class="btn btn-primary btn-sm" style="flex: 1; text-align: center;">
-                        Postularme
-                    </a>
+                <div>
+                    <div style="display: flex; gap: 0.5rem; justify-content: space-between; align-items: center; margin-bottom: <?= $esGestor ? '0.65rem' : '0' ?>;">
+                        <a href="<?= BASE_URL ?>/index.php?c=Convocatoria&a=detalle&id=<?= $c['id'] ?>" class="btn btn-secondary btn-sm" style="flex: 1; text-align: center;">
+                            Ver Requisitos
+                        </a>
+                        <a href="<?= BASE_URL ?>/index.php?c=Postulacion&a=index&convocatoria_id=<?= $c['id'] ?>" class="btn btn-primary btn-sm" style="flex: 1; text-align: center;">
+                            Postularme
+                        </a>
+                    </div>
+
+                    <?php if ($esGestor): ?>
+                        <div style="display: flex; gap: 0.5rem; border-top: 1px dashed #e2e8f0; padding-top: 0.65rem;">
+                            <a href="<?= BASE_URL ?>/index.php?c=Convocatoria&a=editar&id=<?= $c['id'] ?>" class="btn btn-sm" style="flex: 1; text-align: center; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; font-weight: 600;">
+                                <?= IconHelper::render('edit', 13) ?> Editar
+                            </a>
+                            <form action="<?= BASE_URL ?>/index.php?c=Convocatoria&a=eliminar" method="POST" style="flex: 1;" onsubmit="return confirm('¿Está seguro de eliminar permanentemente la convocatoria <?= htmlspecialchars($c['codigo'], ENT_QUOTES, 'UTF-8') ?>? Esta acción borrará para siempre la vacante y todas sus postulaciones de la base de datos.');">
+                                <input type="hidden" name="id" value="<?= $c['id'] ?>">
+                                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                                <button type="submit" class="btn btn-sm" style="width: 100%; text-align: center; background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; font-weight: 600; cursor: pointer;">
+                                    <?= IconHelper::render('trash', 13) ?> Eliminar
+                                </button>
+                            </form>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
         <?php endforeach; ?>

@@ -1,12 +1,4 @@
 <?php
-namespace App\Controllers;
-
-use App\Core\Request;
-use App\Core\Response;
-use App\Core\View;
-use App\Helpers\AuthHelper;
-use App\Models\PlanTrabajo;
-use App\Models\Convocatoria;
 
 class PlanTrabajoController {
     public function index(Request $request): void {

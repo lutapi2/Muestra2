@@ -6,7 +6,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Accordion functionality (Image 3)
     const accordionHeaders = document.querySelectorAll('.accordion-header');
-    accordionHeaders.forEach(header => {
+    accordionHeaders.forEach(function (header) {
         header.addEventListener('click', function () {
             const content = this.nextElementSibling;
             const isOpen = content.classList.contains('open');
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const query = this.value.toLowerCase().trim();
             const documentItems = document.querySelectorAll('.document-item-row');
 
-            documentItems.forEach(item => {
+            documentItems.forEach(function (item) {
                 const text = item.textContent.toLowerCase();
                 if (text.includes(query)) {
                     item.style.display = 'flex';
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const tableRows = document.querySelectorAll('#contratacionTable tbody tr');
 
             let visibleCount = 0;
-            tableRows.forEach(row => {
+            tableRows.forEach(function (row) {
                 const userCell = row.querySelector('.user-col');
                 if (userCell) {
                     const text = userCell.textContent.toLowerCase();

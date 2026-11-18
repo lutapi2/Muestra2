@@ -1,12 +1,4 @@
 <?php
-namespace App\Controllers;
-
-use App\Core\Request;
-use App\Core\Response;
-use App\Core\View;
-use App\Helpers\AuthHelper;
-use App\Helpers\AuditHelper;
-use App\Models\Usuario;
 
 class AuthController {
     public function login(Request $request): void {
@@ -64,56 +56,65 @@ class AuthController {
             Response::redirect('c=Dashboard&a=index');
         }
 
+        $formData = $_SESSION['form_register'] ?? [];
+        unset($_SESSION['form_register']);
+
         View::render('auth.register', [
-            'csrf_token' => $request->getCsrfToken()
+            'csrf_token' => $request->getCsrfToken(),
+            'form' => $formData
         ], 'landing');
     }
 
     public function doRegister(Request $request): void {
         $nombres = trim($request->post('nombres', ''));
         $apellidos = trim($request->post('apellidos', ''));
+        $tipoDoc = trim($request->post('tipo_documento', 'CC'));
         $numeroDoc = trim($request->post('numero_documento', ''));
-        $correo = trim($request->post('correo', ''));
+        $correo = strtolower(trim($request->post('correo', '')));
+        $telefono = trim($request->post('telefono', ''));
+        $ciudad = trim($request->post('ciudad', 'Sincelejo'));
+        $direccion = trim($request->post('direccion', ''));
         $password = $request->post('password', '');
         $consentimiento = $request->post('consentimiento_datos');
 
+        $_SESSION['form_register'] = [
+            'nombres' => $nombres,
+            'apellidos' => $apellidos,
+            'tipo_documento' => $tipoDoc,
+            'numero_documento' => $numeroDoc,
+            'correo' => $correo,
+            'telefono' => $telefono,
+            'ciudad' => $ciudad,
+            'direccion' => $direccion
+        ];
+
         if (empty($nombres) || empty($apellidos) || empty($numeroDoc) || empty($correo) || empty($password)) {
-            if ($request->isAjax()) {
-                Response::json(['success' => false, 'message' => 'Todos los campos obligatorios deben ser diligenciados.'], 400);
-            }
             AuthHelper::setFlash('danger', 'Todos los campos obligatorios deben ser diligenciados.');
             Response::redirect('c=Auth&a=register');
         }
 
+        if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+            AuthHelper::setFlash('danger', 'Por favor ingrese un correo electrónico válido (ejemplo: usuario@correo.com).');
+            Response::redirect('c=Auth&a=register');
+        }
+
         if (strlen($password) < 6) {
-            if ($request->isAjax()) {
-                Response::json(['success' => false, 'message' => 'La contraseña debe contener al menos 6 caracteres.'], 400);
-            }
-            AuthHelper::setFlash('danger', 'La contraseña debe contener al menos 6 caracteres.');
+            AuthHelper::setFlash('danger', 'La contraseña debe tener al menos 6 caracteres.');
             Response::redirect('c=Auth&a=register');
         }
 
         if (empty($consentimiento)) {
-            if ($request->isAjax()) {
-                Response::json(['success' => false, 'message' => 'Debe aceptar los términos de tratamiento de datos personales conforme a la política CECAR (RF-015, RN-004).'], 400);
-            }
             AuthHelper::setFlash('danger', 'Debe aceptar los términos de tratamiento de datos personales conforme a la política CECAR (RF-015, RN-004).');
             Response::redirect('c=Auth&a=register');
         }
 
-        if (Usuario::existeDocumento($numeroDoc)) {
-            if ($request->isAjax()) {
-                Response::json(['success' => false, 'message' => 'Ya existe un usuario registrado con este número de documento.'], 400);
-            }
-            AuthHelper::setFlash('warning', 'Ya existe un usuario registrado con este número de documento.');
+        if (Usuario::emailExiste($correo)) {
+            AuthHelper::setFlash('warning', 'Ya existe una cuenta registrada con el correo: ' . htmlspecialchars($correo) . '. Inicie sesión o recupere su clave.');
             Response::redirect('c=Auth&a=register');
         }
 
-        if (Usuario::existeCorreo($correo)) {
-            if ($request->isAjax()) {
-                Response::json(['success' => false, 'message' => 'Ya existe una cuenta registrada con este correo electrónico.'], 400);
-            }
-            AuthHelper::setFlash('warning', 'Ya existe una cuenta registrada con este correo electrónico.');
+        if (Usuario::documentoExiste($numeroDoc)) {
+            AuthHelper::setFlash('warning', 'El número de documento ' . htmlspecialchars($numeroDoc) . ' ya se encuentra registrado.');
             Response::redirect('c=Auth&a=register');
         }
 
@@ -121,34 +122,24 @@ class AuthController {
             $userId = Usuario::registrarCandidato([
                 'nombres' => $nombres,
                 'apellidos' => $apellidos,
-                'tipo_documento' => $request->post('tipo_documento', 'CC'),
+                'tipo_documento' => $tipoDoc,
                 'numero_documento' => $numeroDoc,
                 'correo' => $correo,
-                'telefono' => $request->post('telefono', ''),
-                'ciudad' => $request->post('ciudad', 'Sincelejo'),
-                'direccion' => $request->post('direccion', ''),
+                'telefono' => $telefono,
+                'ciudad' => $ciudad,
+                'direccion' => $direccion,
                 'password' => $password
             ]);
+
+            unset($_SESSION['form_register']);
 
             $nuevoUsuario = Usuario::findById($userId);
             AuthHelper::login($nuevoUsuario);
             AuditHelper::log('registro_candidato', 'usuarios', $userId);
 
             AuthHelper::setFlash('success', '¡Cuenta de candidato creada exitosamente! Su consentimiento de datos ha sido registrado.');
-            
-            if ($request->isAjax()) {
-                Response::json([
-                    'success' => true,
-                    'message' => '¡Cuenta creada con éxito! Bienvenido(a), ' . $nuevoUsuario['nombres'],
-                    'redirect' => BASE_URL . '/index.php?c=Dashboard&a=index'
-                ]);
-            }
-
             Response::redirect('c=Dashboard&a=index');
-        } catch (\Exception $e) {
-            if ($request->isAjax()) {
-                Response::json(['success' => false, 'message' => 'Error al crear la cuenta: ' . $e->getMessage()], 500);
-            }
+        } catch (Throwable $e) {
             AuthHelper::setFlash('danger', 'Error al crear la cuenta: ' . $e->getMessage());
             Response::redirect('c=Auth&a=register');
         }

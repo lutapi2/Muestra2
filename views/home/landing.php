@@ -1,6 +1,3 @@
-<?php
-use App\Helpers\IconHelper;
-?>
 <div class="landing-hero">
     <!-- Left Column: Copy & Actions -->
     <div>

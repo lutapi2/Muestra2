@@ -1,8 +1,4 @@
 <?php
-namespace App\Models;
-
-use App\Core\Database;
-use PDO;
 
 class ItemHV {
     public static function getByPostulacion(int $postulacionId): array {
@@ -98,7 +94,7 @@ class ItemHV {
 
             $pdo->commit();
             return $itemId;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $pdo->rollBack();
             throw $e;
         }
@@ -140,7 +136,7 @@ class ItemHV {
             }
 
             $pdo->commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $pdo->rollBack();
             throw $e;
         }

@@ -1,22 +1,30 @@
 <?php
-namespace App\Core;
-
-use PDO;
-use PDOException;
 
 class Database {
     private static ?PDO $instance = null;
 
     public static function getConnection(): PDO {
         if (self::$instance === null) {
-            $config = require ROOT_PATH . '/config/database.php';
+            $root = defined('ROOT_PATH') ? ROOT_PATH : dirname(__DIR__, 2);
+            $storage = defined('STORAGE_PATH') ? STORAGE_PATH : $root . '/storage';
+            $configFile = $root . '/config/database.php';
+            
+            $config = (file_exists($configFile)) ? require $configFile : [];
+            if (!is_array($config)) {
+                $config = [];
+            }
+
             $driver = $config['driver'] ?? 'sqlite';
 
             if ($driver === 'sqlite') {
-                $dbPath = $config['sqlite']['database'];
+                $dbPath = $config['sqlite']['database'] ?? ($storage . '/database.sqlite');
+                if (empty($dbPath)) {
+                    $dbPath = $storage . '/database.sqlite';
+                }
+
                 $dir = dirname($dbPath);
-                if (!is_dir($dir)) {
-                    mkdir($dir, 0777, true);
+                if (!empty($dir) && !is_dir($dir)) {
+                    @mkdir($dir, 0777, true);
                 }
 
                 $isNew = !file_exists($dbPath) || filesize($dbPath) === 0;
@@ -26,6 +34,8 @@ class Database {
                     self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     self::$instance->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
                     self::$instance->exec("PRAGMA foreign_keys = ON;");
+                    self::$instance->exec("PRAGMA journal_mode = WAL;");
+                    self::$instance->exec("PRAGMA synchronous = NORMAL;");
 
                     if ($isNew) {
                         self::initializeDatabase(self::$instance);
@@ -64,4 +74,9 @@ class Database {
             $pdo->exec($seedSql);
         }
     }
+}
+
+// Compatibilidad con llamadas namespaced si existen
+if (!class_exists('App\\Core\\Database', false)) {
+    class_alias('Database', 'App\\Core\\Database');
 }

@@ -1,8 +1,4 @@
 <?php
-namespace App\Models;
-
-use App\Core\Database;
-use PDO;
 
 class PlanTrabajo {
     public static function listarPorConvocatoria(?int $convocatoriaId = null): array {

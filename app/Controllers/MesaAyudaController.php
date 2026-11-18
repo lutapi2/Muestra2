@@ -1,12 +1,4 @@
 <?php
-namespace App\Controllers;
-
-use App\Core\Request;
-use App\Core\Response;
-use App\Core\View;
-use App\Helpers\AuthHelper;
-use App\Helpers\AuditHelper;
-use App\Models\TicketAyuda;
 
 class MesaAyudaController {
     public function index(Request $request): void {

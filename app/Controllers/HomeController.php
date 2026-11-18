@@ -1,9 +1,4 @@
 <?php
-namespace App\Controllers;
-
-use App\Core\Request;
-use App\Core\View;
-use App\Models\Convocatoria;
 
 class HomeController {
     public function landing(Request $request): void {
@@ -18,7 +13,7 @@ class HomeController {
     }
 
     public function tutorial(Request $request): void {
-        $layout = \App\Helpers\AuthHelper::estaAutenticado() ? 'main' : 'landing';
+        $layout = AuthHelper::estaAutenticado() ? 'main' : 'landing';
         View::render('home.tutorial', [], $layout);
     }
 }

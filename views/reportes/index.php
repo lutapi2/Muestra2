@@ -1,6 +1,3 @@
-<?php
-use App\Helpers\FormatHelper;
-?>
 
 <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
     <div>
@@ -14,7 +11,7 @@ use App\Helpers\FormatHelper;
 
     <!-- Exportar Excel -->
     <a href="<?= BASE_URL ?>/index.php?c=Reportes&a=exportarExcel&tipo=<?= htmlspecialchars($tipoReporte, ENT_QUOTES, 'UTF-8') ?>" class="btn btn-primary" style="background: #15803d; display: inline-flex; align-items: center; gap: 0.4rem;">
-        <?= \App\Helpers\IconHelper::render('download', 16) ?> Exportar Informe a Excel
+        <?= IconHelper::render('download', 16) ?> Exportar Informe a Excel
     </a>
 </div>
 

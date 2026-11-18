@@ -1,6 +1,3 @@
-<?php
-use App\Helpers\FormatHelper;
-?>
 
 <div style="max-width: 800px; margin: 0 auto;">
     <div style="margin-bottom: 1.5rem;">
