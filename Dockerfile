@@ -15,8 +15,9 @@ ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Habilitar AllowOverride All para soporte de reescritura de URLs
-RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+# Habilitar AllowOverride All para soporte de reescritura de URLs y suprimir advertencia ServerName
+RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf \
+    && echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # Copiar el código fuente de la aplicación
 WORKDIR /var/www/html

@@ -15,18 +15,12 @@ chmod -R 777 /var/www/html/storage
 # Inicializar base de datos y archivos semilla ejecutando un ciclo silencioso de arranque
 php -r "
 require '/var/www/html/config/app.php';
-spl_autoload_register(function (\$c) {
-    \$p = 'App\\\\'; \$b = ROOT_PATH . '/app/';
-    if (strncmp(\$p, \$c, 4) === 0) {
-        \$f = \$b . str_replace('\\\\', '/', substr(\$c, 4)) . '.php';
-        if (file_exists(\$f)) require \$f;
-    }
-});
+require '/var/www/html/app/cargar_clases.php';
 try {
-    \App\Core\Database::getConnection();
-    \App\Helpers\FileHelper::asegurarArchivosSemilla();
+    Database::getConnection();
+    FileHelper::asegurarArchivosSemilla();
     echo 'Base de datos y soportes inicializados correctamente.\n';
-} catch (Exception \$e) {
+} catch (Throwable \$e) {
     echo 'Aviso de inicializacion: ' . \$e->getMessage() . '\n';
 }
 " || true
